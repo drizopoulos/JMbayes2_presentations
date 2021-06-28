@@ -1,0 +1,605 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+/* @import url(https://fonts.googleapis.com/css?family=Cabin:600,600i&display=swap); */
+/* @import url(https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700&display=swap); */
+
+
+:root {
+  /* Fonts */
+  --text-font-family: 'Montserrat';
+  --text-font-is-google: 1;
+  --text-font-family-fallback: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial;
+  --text-font-base: sans-serif;
+  --header-font-family: 'Montserrat';
+  --header-font-is-google: 1;
+  --code-font-family: 'Source Code Pro';
+  --code-font-is-google: 1;
+  --base-font-size: 26px;
+  --text-font-size: 1rem;
+  --code-font-size: 0.8rem;
+  --code-inline-font-size: 1em;
+  --header-h1-font-size: 3.75rem;
+  --header-h2-font-size: 2.25rem;
+  --header-h3-font-size: 1.75rem;
+
+  /* Colors */
+  --title-slide-background-color: #242933;
+  --title-slide-text-color: #ECEFF4;
+
+  --text-color: #ECEFF4;
+  --background-color: #242933;
+
+  --header-color: #ECEFF4;
+  --header-background-color: red;
+  --header-background-text-color: #ECEFF4;
+
+
+  --inverse-text-color: #000000;
+  --inverse-header-color: #000000; /*Color for headlines in inverse mode*/
+  --inverse-background-color: #8FBCBB; /* nord7 */
+
+  --text-bold-color: #88C0D0;  /* nord8 */
+  --link-color: #5E81AC;   /* nord10 */
+
+  --code-inline-color: #B48EAD;    /* nord15 */
+
+  --primary: #5E81AC;           /* nord10 */
+  --secondary: #81A1C1;         /* nord9 */
+  --white: #FFFFFF;
+  --black: #000000;
+
+  /* Polar Night colors */
+  --nord0: #2E3440;
+  --nord1: #3B4252;
+  --nord2: #434C5E;
+  --nord3: #4C566A;
+
+  /* Snow Storm colors */
+  --nord4: #D8DEE9;
+  --nord5: #E5E9F0;
+  --nord6: #ECEFF4;
+
+  /* Frost colors */
+  --nord7: #8FBCBB;
+  --nord8: #88C0D0;
+  --nord9: #81A1C1;
+  --nord10: #5E81AC;
+
+  /* Aurora colors */
+  --nord11: #BF616A;            /* red */
+  --nord12: #D08770;            /* orange */
+  --nord13: #EBCB8B;            /* yellow */
+  --nord14: #A3BE8C;            /* green */
+  --nord15: #B48EAD;            /* purple */
+}
+
+html {
+  font-size: var(--base-font-size);
+}
+
+body {
+  font-family: var(--text-font-family), var(--text-font-family-fallback), var(--text-font-base);
+  font-weight: normal;
+  color: var(--text-color);
+}
+h1, h2, h3 {
+  font-family: var(--header-font-family);
+  font-weight: 600;
+  color: var(--header-color);
+}
+
+.remark-slide-content {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-size: 1rem;
+  padding: 10px 64px 16px 64px; /* top right bottom left */
+  width: 100%;
+  height: 100%;
+}
+.remark-slide-content h1 {
+    font-size: var(--header-h1-font-size);
+}
+
+.remark-slide-content > h2:first-of-type {
+    margin-top: 0px;
+}
+
+.remark-slide-content h2 {
+  font-size: var(--header-h2-font-size);
+}
+.remark-slide-content h3 {
+  font-size: var(--header-h3-font-size);
+}
+.remark-code, .remark-inline-code {
+  font-family: var(--code-font-family), Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace;
+}
+.remark-code {
+  font-size: var(--code-font-size);
+}
+.remark-inline-code {
+  font-size: var(--code-inline-font-size);
+  color: var(--code-inline-color);
+}
+.remark-slide-number {
+  color: var(--nord3);
+  opacity: 1;
+  font-size: 0.7em;
+}
+strong {
+    color: var(--text-bold-color);
+}
+a, a > code {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.footnote {
+  position: absolute;
+  bottom: 60px;
+  padding-right: 4em;
+  font-size: 0.7em;
+  color: var(--nord3);
+}
+
+
+.reference {
+    text-align: right;
+    font-size: 0.7em;
+    position: absolute;
+    right: 55px;
+}
+
+.remark-code-line-highlighted {
+  background-color: var(--nord2);
+}
+.remark-code-span-highlighted {
+  background-color: var(--nord2);
+}
+
+.inverse {
+  background-color: var(--inverse-background-color);
+  color: var(--inverse-text-color);
+}
+.inverse h1, .inverse h2, .inverse h3 {
+  color: var(--inverse-header-color);
+}
+
+
+
+
+
+
+/* title slide ------------------------------------------------------ */
+
+.title-slide-custom {
+    background-color: var(--title-slide-background-color);
+    background-image: linear-gradient(to right, rgba(36, 41, 51, 10%), rgba(36, 41, 51, 30%)), url(graphics/Logo1DB.png);
+    background-position: 21px 560px;
+    background-size: 280px;
+}
+
+.title-slide-custom .remark-slide-number {
+  display: none;
+}
+
+.title-slide-custom h1, .title-slide-custom h2 {
+    color: var(--nord4);
+    font-size: 3rem;
+    font-weight: 900;
+}
+
+.title-slide-custom > h2:first-of-type {
+    margin-top: 30px;
+}
+
+#author{
+    position: absolute;
+    bottom: 145px;
+}
+
+#contact {
+    text-align: right;
+    position: absolute;
+    bottom: 35px;
+    right: 55px;
+    font-size: 0.8em;
+    color: var(--nord9);
+}
+
+#contact a {
+  color: inherit;
+}
+
+/* .title-slide, .title-slide h1, .title-slide h2, .title-slide h3 { */
+/*     color: var(--title-slide-text-color); */
+/*     text-align: left; */
+/* } */
+/* .title-slide { */
+/*     background-color: var(--title-slide-background-color); */
+/*     text-align: left; */
+/* } */
+/* .title-slide .remark-slide-number { */
+/*   display: none; */
+/* } */
+
+/* .title-slide h2 { */
+/*     font-size: 32px; */
+/* } */
+/* .title-slide h3 { */
+/*     font-size: 30px; */
+/* } */
+/* ----------------------------------------------------------------------------- */
+
+
+
+
+
+/* Header and Footer -------------------------------------------------------------- */
+/* div.my-header { */
+/*     /\* background-color: #F77A00; *\/ */
+/*     /\* background: -webkit-gradient(linear, left top, right top, color-stop(0%,#ffb76b), color-stop(0%,#ffa73d), color-stop(0%,#ffffff), color-stop(10%,#ffffff), color-stop(25%,#F77A00), color-stop(100%,#F77A00)); *\/ */
+/*     position: fixed; */
+/*     top: 0px; */
+/*     left: 0px; */
+/*     height: 30px; */
+/*     width: 100%; */
+/*     text-align: left; */
+/* } */
+
+div.my-footer {
+    /* background-color: #272822; */
+    position: absolute;
+    bottom: 12px;
+    left: 20px;
+    /* height: 20px; */
+    width: 100%;
+    text-align: center;
+}
+div.my-footer span {
+    font-size:  0.7em;
+    opacity: 1;
+    color: var(--nord1);
+    /* position: absolute;  */
+    left: 15px;
+    bottom: 4px;
+    display: inline-block;
+}
+
+.my-footer a {
+  color: inherit;
+}
+
+
+/* Layout options for single slides ----------------------------------------------------- */
+/* Two-column layout */
+.left-column {
+  width: 20%;
+  height: 92%;
+  float: left;
+}
+.left-column h2, .left-column h3 {
+  color: #1381B0;
+}
+.left-column h2:last-of-type, .left-column h3:last-child {
+  color: #1381B0;
+}
+.right-column {
+  width: 75%;
+  float: right;
+  padding-top: 1em;
+}
+
+
+.pull-left {
+  float: left;
+  width: 47%;
+}
+.pull-right {
+  float: right;
+  width: 47%;
+}
+
+
+.three-cols {
+    float: left;
+    width: 33.33%
+}
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.gr-left {
+    float: left;
+    width: 36.3%;
+}
+.gr-right {
+    float: right;
+    width: 58.7%;
+}
+.gr-right ~ * {
+  clear: both;
+}
+
+
+.gr-left2 {
+    float: left;
+    width: 58.7%;
+}
+.gr-right2 {
+    float: right;
+    width: 36.3%;
+}
+
+.gr-right2 ~ * {
+  clear: both;
+}
+
+.pull-right ~ * {
+  clear: both;
+}
+
+
+img, video, iframe {
+  max-width: 100%;
+}
+blockquote {
+  border-left: solid 5px var(--nord9);
+  padding-left: 1em;
+}
+.remark-slide table {
+  margin: auto;
+  border-top: 0px solid #666;
+  border-bottom: 0px solid #666;
+}
+.remark-slide table thead th {
+  border-bottom: 1px solid #ddd;
+}
+th, td {
+  padding: 5px;
+}
+/* .remark-slide thead, .remark-slide tfoot, .remark-slide tr:nth-child(even) { */
+/*   background: #FFEAD1; */
+/* } */
+table.dataTable tbody {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+/* table.dataTable.display tbody tr.odd { */
+/*   background-color: var(--background-color); */
+/* } */
+/* table.dataTable.display tbody tr.even { */
+/*   background-color: #FFEAD1; */
+/* } */
+table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+  color: var(--text-color);
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  color: var(--text-color) !important;
+}
+
+/* Slide Header Background for h1 elements */
+.remark-slide-content.header_background > h1 {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--header-background-color);
+  color: var(--header-background-text-color);
+  padding: 2rem 64px 1.5rem 64px;
+  margin-top: 0;
+  box-sizing: border-box;
+}
+.remark-slide-content.header_background {
+  padding-top: 7rem;
+}
+
+@page { margin: 0; }
+@media print {
+  .remark-slide-scaler {
+    width: 100% !important;
+    height: 100% !important;
+    transform: scale(1) !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+}
+
+.primary {
+  color: var(--primary);
+}
+.bg-primary {
+  background-color: var(--primary);
+}
+.secondary {
+  color: var(--secondary);
+}
+.bg-secondary {
+  background-color: var(--secondary);
+}
+
+
+.nord0box {
+  border: solid 0px;
+  margin-bottom: 5px;
+  padding: 0.2em 1.15em;
+  background-color: var(--nord0)
+}
+
+.nord1box {
+    border: solid 0px;
+    padding: 0.2em 1.15em;
+    margin-bottom: 5px;
+    background-color: var(--nord1)
+}
+
+.nord7box {
+    border: 0px;
+    border-style: solid;
+    padding: 0.2em 0.2em 0.3em 0.2em;
+    margin-bottom: 5px;
+    background-color: var(--nord7)
+}
+
+
+.raisebox150 {
+  position: relative;
+  bottom: 150px;
+}
+
+
+
+
+/* tables ====================================================================*/
+.simpletable {
+    border: none;
+    border-top: none;
+    border-bottom: none;
+    border-collapse: collapse;
+    border-spacing: 0px;
+}
+
+.simpletable td {
+    text-align: center;
+}
+
+.headrow {
+  padding: 0px;
+  margin: 0px;
+}
+
+.headrow td {
+  border-bottom: 1px solid red;
+}
+
+
+.rownr {
+    color: gray;
+    padding-right: 10px;
+    font-size: 0.8em;
+}
+
+.hlgt-row {
+    background-color: var(--nord0);
+}
+
+
+.container .box {
+    margin:auto;
+    display:table;
+}
+.container .box .box-row {
+    display:table-row;
+}
+.container .box .box-cell {
+    display:table-cell;
+    vertical-align: middle;
+    padding:20px;
+    text-align:center;
+    margin: 50px;
+}
+
+
+
+::-webkit-scrollbar {
+    width: 16px;
+}
+ 
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 6px;
+}
+ 
+::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    background: var(--nord0);
+    -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.5); 
+}
+
+::-webkit-scrollbar-corner {
+  background: inherit;
+}
+
+.scroll450 {
+    max-height: 450px;
+    overflow-y: auto;
+}
+
+
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: var(--background-color);
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+.modal-button {
+  background-color: var(--nord0);
+  border: solid 1px var(--nord10);
+  color: var(--text-color);
+  width: 280px;
+  padding: 20px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  margin: 0px 20px;
+  cursor: pointer;
+}
+
+
+.the-end .remark-slide-number {
+  display: none;
+}
+
+.remark-notes-area {
+  font-size: 0.7rem;
+}
+
+/*
+.remark-notes {
+  display: none;
+}
+
+.remark-notes-preview {
+  display: none;
+}
+*/
