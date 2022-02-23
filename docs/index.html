@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>JMbayes2</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dimitris Rizopoulos" />
+    <meta name="date" content="2022-02-23" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.4/tile-view.js"></script>
+    <script src="libs/xaringanExtra_fit-screen-0.2.4/fit-screen.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: title-slide-custom
+count: false
+
+
+
+&lt;!-- &lt;h1&gt;JMbayes2&lt;/h1&gt; --&gt;
+&lt;div style="font-size: 50pt; font-weight: 900; color: var(--nord4); margin-top: 60px;"&gt;
+JMbayes2
+&lt;/div&gt;
+
+&lt;div style="font-size: 26pt; color: var(--nord9); font-weight: 300; margin-top:40px;"&gt;
+Extended Joint Models under the Bayesian Approach
+&lt;/div&gt;
+
+&lt;div id = "author"&gt;
+&lt;div style = "font-size: 32pt; font-weight: bolder; color: var(--nord4);"&gt;Dimitris Rizopoulos&lt;/div&gt;
+&lt;div style = "color: var(--nord9);"&gt;Department of Biostatistics&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="contact"&gt;
+&lt;a href="mailto:d.rizopoulos@erasmusmc.nl"&gt;&lt;i class="fas fa-envelope"&gt;&lt;/i&gt; d.rizopoulos@erasmusmc.nl&lt;/a&gt; &amp;emsp;
+&lt;a href="https://twitter.com/drizopoulos"&gt;&lt;i class="fab fa-twitter"&gt;&lt;/i&gt; drizopoulos&lt;/a&gt; &amp;emsp;
+&lt;a href="https://github.com/drizopoulos"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt; drizopoulos&lt;/a&gt; &amp;emsp;
+&lt;/div&gt;
+
+---
+layout: true
+
+&lt;link href="https://unpkg.com/nord-highlightjs@0.1.0/dist/nord.css" rel="stylesheet" type="text/css" /&gt;
+&lt;link href="fontawesome-free-5.14.0-web/css/all.css" rel="stylesheet"&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;
+&lt;a href="https://twitter.com/drizopoulos"&gt;&lt;i class="fab fa-twitter"&gt;&lt;/i&gt; drizopoulos&lt;/a&gt;
+&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;
+&lt;a href="https://github.com/drizopoulos"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt; drizopoulos&lt;/a&gt; &amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;
+&lt;a href = "http://www.drizopoulos.com/"&gt;&lt;i class="fas fa-globe-americas"&gt;&lt;/i&gt; www.drizopoulos.com&lt;/a&gt;
+&lt;/span&gt;&lt;/div&gt; 
+
+---
+class: center, middle, animated, fadeIn
+
+# Joint Models:&lt;br&gt;Current Standard
+
+---
+
+## A Bit of History
+
+&lt;p&gt; &lt;/p&gt;
+
+--
+
+&lt;div style = "width: 75%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;Joint models have been around for many years...&lt;/strong&gt;
+&lt;/div&gt;
+
+--
+
+&lt;br&gt;
+
+- Two parallel trajectories
+
+.pull-left[
+**Event Process**
+&lt;div style = "width: 75%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+endogenous time-varying covariates
+&lt;/div&gt;
+]
+
+.pull-right[
+**Longitudinal Outcomes**
+&lt;div style = "width: 75%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+non-random (MNAR) dropout
+&lt;/div&gt;
+]
+
+
+---
+
+## JMs and Extensions
+
+&lt;div style = "width: 75%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;Basic assumption: &lt;font color = "red"&gt;Conditional Independence&lt;/font&gt;&lt;/strong&gt; &lt;br&gt; The random effects \(\color{var(--nord15)}{b}\) explain all interrelationships.
+&lt;/div&gt;
+
+.footnote[
+[&lt;i class = "fas fa-book"&gt;&lt;/i&gt; Rizopoulos (2012)](https://www.crcpress.com/product/isbn/9781439872864)
+]
+
+--
+
+&lt;br&gt;
+* `\(\mathcal{Y}\)`: Longitudinal process
+* `\(\mathcal{T}\)`: Event process
+
+--
+
+`\begin{align*}
+p\{\mathcal{Y},\, \mathcal{T} \mid \color{var(--nord15)}{b}\} = 
+p\{\mathcal{Y} \mid \color{var(--nord15)}{b}\} \; 
+p\{\mathcal{T} \mid \color{var(--nord15)}{b}\}
+\end{align*}`
+
+---
+
+## JMs and Extensions
+
+
+
+&lt;img src="JM.gif" alt="DynPreds" style="margin:0px 0px 0px 0px; width:450px;"&gt; 
+
+---
+
+## JMs and Extensions
+
+&lt;br&gt;
+
+.pull-left[
+**Longitudinal Process**
+- multiple outcomes
+- continuous, discrete, left-censored
+- flexible models (splines, etc.)
+]
+
+.pull-right[
+**Event Process**
+- competing risks
+- multi-state processes
+- recurrent events
+- multivariate
+]
+
+---
+
+## JMs and Extensions
+
+**Conditional Independence:** .reference[[&lt;i class = "fas fa-book"&gt;&lt;/i&gt; Rizopoulos (2012)](https://www.crcpress.com/product/isbn/9781439872864)]
+
+&lt;ul class="fa-ul"&gt;
+  &lt;li&gt;&lt;span class="fa-li" style = "color:var(--nord14);"&gt;
+      &lt;i class="far fa-smile"&gt;&lt;/i&gt;&lt;/span&gt;
+      mathematically convenient&lt;/li&gt;
+  &lt;li&gt;&lt;span class="fa-li" style = "color:var(--nord11);"&gt;
+  &lt;i class="far fa-frown"&gt;&lt;/i&gt;&lt;/span&gt;
+  computionally intensive&lt;/li&gt;
+&lt;/ul&gt;
+
+--
+
+.pull-left[
+**Maximum Likelihood:**
+&lt;div style = "width: 75%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+requires high-dimensional numerical integration
+&lt;/div&gt;
+]
+
+.pull-right[
+**Bayesian:**
+&lt;div style = "width: 75%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+requires sampling high-dimensional random effects
+&lt;/div&gt;
+]
+
+---
+
+## Theory vs Practice
+
+As with many other statistical techniques,&lt;br&gt; 
+&amp;nbsp;&amp;nbsp;&amp;nbsp;it took some years for JMs software to appear
+
+--
+
+&lt;br&gt;
+
+&lt;div style = "width: 75%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;Nowadays, given the rise of the  &lt;font color = "red"&gt;R ecosystem&lt;/font&gt; a number of packages is available&lt;/strong&gt;
+&lt;/div&gt;
+
+
+---
+
+## Available Software
+
+.pull-left[
+**Maximum Likelihood:**
+
+&lt;button class="modal-button" href="#JM"&gt;&lt;strong&gt;JM&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="JM" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  &lt;ul&gt;
+    &lt;li&gt; One continuous longitudinal outcome&lt;/li&gt;
+    &lt;li&gt; Competing risks&lt;/li&gt;
+    &lt;li&gt; (pseudo) adaptive Gaussian quadrature&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button class="modal-button" href="#joineRML"&gt;&lt;strong&gt;joineRML&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="joineRML" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  &lt;ul&gt;
+    &lt;li&gt; Multiple continuous longitudinal outcomes&lt;/li&gt;
+    &lt;li&gt; Monte Carlo EM (&lt;font color="red"&gt;needs tuning&lt;/font&gt;)&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button class="modal-button" href="#frailtyPack"&gt;&lt;strong&gt;frailtyPack&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="frailtyPack" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  &lt;ul&gt;
+    &lt;li&gt; One continuous longitudinal outcome&lt;/li&gt;
+    &lt;li&gt; recurrent events &amp; terminating event&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+]
+
+.pull-right[
+**Bayesian:**
+&lt;button class="modal-button" href="#JMbayes"&gt;&lt;strong&gt;JMbayes&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="JMbayes" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  &lt;ul&gt;
+    &lt;li&gt; Multiple longitudinal outcomes of different type&lt;/li&gt;
+    &lt;li&gt; competing risks &amp; multi-state models&lt;/li&gt;
+    &lt;li&gt; Corrected two-stage approach (&lt;font color="red"&gt;not fully Bayesian&lt;/font&gt;)&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button class="modal-button" href="#stan_jm"&gt;&lt;strong&gt;stan_jm&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="stan_jm" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  &lt;ul&gt;
+    &lt;li&gt; Multiple longitudinal outcomes of different type&lt;/li&gt;
+    &lt;li&gt; fully Bayesian in STAN (&lt;font color="red"&gt;slow&lt;/font&gt;)&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button class="modal-button" href="#bamlss"&gt;&lt;strong&gt;jm_bamlss&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="bamlss" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  &lt;ul&gt;
+    &lt;li&gt; single longitudinal outcomes&lt;/li&gt;
+    &lt;li&gt; no competing risks nor multi-state models&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+]
+
+---
+
+## Available Software
+
+&lt;br&gt;&lt;br&gt;
+
+&lt;div style = "width: 75%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;Still no software package exists to satisfy all needs&lt;/strong&gt;
+&lt;/div&gt;
+
+---
+class: center, middle, animated, fadeIn
+
+# JMbayes2
+
+---
+
+## A New Package
+
+.nord0box[
+**&lt;span style="font-size: 1.5rem;"&gt;&amp;#8680;&lt;/span&gt; 
+Learning from the lessons of the past we decided to create a new package**
+]
+
+--
+
+&lt;br&gt;
+
+Our aims
+
+.pull-left[
+* versatile
+* user-friendly
+* fast
+* complete
+]
+
+.pull-right[
+&lt;div style = "color: var(--nord3);"&gt;
+&lt;ul&gt;
+&lt;li&gt;cover (almost) all extensions&lt;/li&gt;
+&lt;li&gt;straightforward syntax&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;C++&lt;/strong&gt; &amp; computational tricks&lt;/li&gt;
+&lt;li&gt;support functions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+]
+
+---
+
+## Under the Hood
+
+.nord0box[
+**Work horse: Metropolis-Hastings algorithm** &lt;br&gt;
+&amp;nbsp;&amp;nbsp;&lt;span style="font-size: 1.5rem;"&gt;&amp;#8680;&lt;/span&gt; adaptive optimal scaling using the Robbins–Monro process
+]
+
+--
+
+&lt;br&gt;
+
+.nord0box[
+**Computational aspects** &lt;br&gt;
+&amp;nbsp;&amp;nbsp;&lt;span style="font-size: 1.5rem;"&gt;&amp;#8680;&lt;/span&gt; parallel sampling of random effects&lt;br&gt;
+&amp;nbsp;&amp;nbsp;&lt;span style="font-size: 1.5rem;"&gt;&amp;#8680;&lt;/span&gt; info from separate fits&lt;br&gt;
+]
+
+---
+
+## Under the Hood
+
+&lt;br&gt;
+
+.nord0box[
+**Implementation** &lt;br&gt;
+&amp;nbsp;&amp;nbsp;&lt;span style="font-size: 1.5rem;"&gt;&amp;#8680;&lt;/span&gt; MCMC written in C++&lt;br&gt;
+&amp;nbsp;&amp;nbsp;&lt;span style="font-size: 1.5rem;"&gt;&amp;#8680;&lt;/span&gt; avoiding double computations&lt;br&gt;
+]
+
+
+
+---
+
+## An Example
+
+
+```r
+library("JMbayes2")
+fm1 &lt;- lme(log(serBilir) ~ year * sex, data = pbc2, random = ~ year | id)
+CoxFit &lt;- coxph(Surv(years, status2) ~ sex, data = pbc2.id)
+
+jointFit1 &lt;- jm(CoxFit, fm1, time_var = "year")
+```
+
+--
+
+&lt;br&gt;
+
+**Check convergence**
+
+
+```r
+ggtraceplot(jointFit1, "alphas")
+```
+
+
+---
+
+## Traceplot
+
+&lt;img src="index_files/figure-html/unnamed-chunk-4-1.png" width="100%" /&gt;
+
+---
+
+## Model Summary
+
+.scroll450[
+
+```r
+summary(jointFit1)
+```
+
+```
+## 
+## Call:
+## jm(Surv_object = CoxFit, Mixed_objects = fm1, time_var = "year")
+## 
+## Data Descriptives:
+## Number of Groups: 312		Number of events: 140 (44.9%)
+## Number of Observations:
+##   log(serBilir): 1945
+## 
+##                  DIC      WAIC      LPML
+## marginal    4644.865  9263.848 -4727.260
+## conditional 4932.179 11494.835 -6346.049
+## 
+## Random-effects covariance matrix:
+##                     
+##        StdDev   Corr
+## (Intr) 1.0105 (Intr)
+## year   0.1791 0.3494
+## 
+## Survival Outcome:
+##                         Mean  StDev    2.5%  97.5%      P   Rhat
+## sexfemale            -0.2006 0.4581 -1.0904 0.7255 0.6356 1.0009
+## value(log(serBilir))  1.2009 0.1197  0.9762 1.4410 0.0000 1.0102
+## 
+## Longitudinal Outcome: log(serBilir) (family = gaussian, link = identity)
+##                   Mean  StDev    2.5%  97.5%      P   Rhat
+## (Intercept)     0.7261 0.3054  0.1325 1.3360 0.0171 1.0003
+## year            0.2578 0.0967  0.0641 0.4470 0.0111 1.0010
+## sexfemale      -0.2618 0.3204 -0.8897 0.3675 0.4064 1.0003
+## year:sexfemale -0.0874 0.1004 -0.2870 0.1122 0.3707 1.0015
+## sigma           0.4024 0.0221  0.3673 0.4538 0.0000 1.0121
+## 
+## MCMC summary:
+## chains: 3 
+## iterations per chain: 3500 
+## burn-in per chain: 500 
+## thinning: 1 
+## time: 14 sec
+```
+]
+
+---
+
+## Multivariate
+
+&lt;br&gt;
+
+
+```r
+fm2 &lt;- lme(prothrombin ~ year * sex, data = pbc2, random = ~ year | id)
+fm3 &lt;- mixed_model(ascites ~ year + sex, data = pbc2,
+                   random = ~ year | id, family = binomial())
+
+jointFit2 &lt;- jm(CoxFit, list(fm1, fm2, fm3), time_var = "year",
+                n_iter = 12000L, n_burnin = 2000L, n_thin = 5L)
+```
+
+---
+
+## Multivariate
+
+.scroll450[
+
+```r
+summary(jointFit2)
+```
+
+```
+## 
+## Call:
+## jm(Surv_object = CoxFit, Mixed_objects = list(fm1, fm2, fm3), 
+##     time_var = "year", n_iter = 12000L, n_burnin = 2000L, n_thin = 5L)
+## 
+## Data Descriptives:
+## Number of Groups: 312		Number of events: 140 (44.9%)
+## Number of Observations:
+##   log(serBilir): 1945
+##   prothrombin: 1945
+##   ascites: 1885
+## 
+##                  DIC     WAIC      LPML
+## marginal    11962.79 17590.29 -10073.17
+## conditional 14725.98 18607.76 -10933.36
+## 
+## Random-effects covariance matrix:
+##                                                  
+##        StdDev   Corr                             
+## (Intr) 0.9951 (Intr)   year (Intr)   year (Intr) 
+## year   0.1871 0.3958                             
+## (Intr) 0.8155 0.5339 0.4596                      
+## year   0.3280 0.3961 0.3417 0.0162               
+## (Intr) 3.7410 0.5214 0.4886 0.5431 0.2722        
+## year   0.6273 0.3949 0.6145 0.2686 0.3907 -0.0362
+## 
+## Survival Outcome:
+##                         Mean  StDev    2.5%  97.5%      P   Rhat
+## sexfemale            -0.7449 0.5913 -1.9161 0.3909 0.1917 1.0035
+## value(log(serBilir))  0.5947 0.2155  0.1479 1.0022 0.0183 1.0386
+## value(prothrombin)    0.1063 0.1203 -0.1439 0.3349 0.3573 1.0225
+## value(ascites)        0.4202 0.1240  0.2170 0.7185 0.0000 1.0953
+## 
+## Longitudinal Outcome: log(serBilir) (family = gaussian, link = identity)
+##                   Mean  StDev    2.5%  97.5%      P   Rhat
+## (Intercept)     0.6974 0.2844  0.1466 1.2683 0.0147 0.9997
+## year            0.2635 0.0783  0.1113 0.4191 0.0020 1.0016
+## sexfemale      -0.2333 0.2975 -0.8350 0.3465 0.4287 0.9999
+## year:sexfemale -0.0765 0.0806 -0.2391 0.0791 0.3330 1.0020
+## sigma           0.3924 0.0185  0.3621 0.4358 0.0000 1.0041
+## 
+## Longitudinal Outcome: prothrombin (family = gaussian, link = identity)
+##                   Mean  StDev    2.5%   97.5%      P   Rhat
+## (Intercept)    10.9376 0.4756 10.0034 11.8868 0.0000 0.9999
+## year            0.2437 0.1636 -0.0786  0.5706 0.1310 1.0007
+## sexfemale      -0.3915 0.5003 -1.3859  0.5974 0.4227 1.0002
+## year:sexfemale  0.0517 0.1719 -0.2880  0.3909 0.7473 1.0014
+## sigma           1.0854 0.0282  1.0368  1.1480 0.0000 1.0024
+## 
+## Longitudinal Outcome: ascites (family = binomial, link = logit)
+##                Mean  StDev    2.5%   97.5%     P   Rhat
+## (Intercept) -5.5041 1.3550 -8.4657 -3.0323 0.000 1.0349
+## year         0.7394 0.2023  0.3680  1.1525 0.000 1.0658
+## sexfemale   -0.4206 1.1586 -2.7063  1.8674 0.699 1.0016
+## 
+## MCMC summary:
+## chains: 3 
+## iterations per chain: 12000 
+## burn-in per chain: 2000 
+## thinning: 5 
+## time: 1.7 min
+```
+]
+
+---
+
+## Functional Forms
+
+
+```r
+jointFit3 &lt;- update(jointFit2, 
+  functional_forms = ~ slope(log(serBilir)) + slope(log(serBilir)):sex + 
+    area(prothrombin))
+```
+
+--
+
+.pull-left[
+**Slope**
+`$$h_i(t) = h_0(t) \exp\biggl\{\alpha \bbox[#2E3440, 5pt]{\frac{d\color{var(--nord14)}{\eta(t)}}{dt}}\biggr\}$$`
+]
+
+.pull-right[
+**(normalized) Area**
+`$$h_i(t) = h_0(t) \exp\biggl\{\alpha \bbox[#2E3440, 5pt]{\frac{1}{t} \int_0^t \color{var(--nord14)}{\eta(s)}\; ds}\biggr\}$$`
+]
+
+&lt;div align="center" style="padding-top:30px;"&gt;\(\color{var(--nord3)}{\eta(t) = \mathbf x_i(t)^\top \boldsymbol \beta + \mathbf z_i(t)^\top \mathbf b_i}\)&lt;/div&gt;
+
+---
+
+## Functional Forms
+
+.scroll450[
+
+```r
+summary(jointFit3)
+```
+
+```
+## 
+## Call:
+## jm(Surv_object = CoxFit, Mixed_objects = list(fm1, fm2, fm3), 
+##     time_var = "year", functional_forms = ~slope(log(serBilir)) + 
+##         slope(log(serBilir)):sex + area(prothrombin), n_iter = 12000L, ...
+## 
+## Data Descriptives:
+## Number of Groups: 312		Number of events: 140 (44.9%)
+## Number of Observations:
+##   log(serBilir): 1945
+##   prothrombin: 1945
+##   ascites: 1885
+## 
+##                  DIC     WAIC       LPML
+## marginal    11959.31 15935.47  -9360.423
+## conditional 14692.20 18428.36 -10881.255
+## 
+## Random-effects covariance matrix:
+##                                                 
+##        StdDev   Corr                            
+## (Intr) 0.9818 (Intr)   year (Intr)   year (Intr)
+## year   0.1905 0.4627                            
+## (Intr) 0.8151 0.5383 0.4817                     
+## year   0.3317 0.4210 0.3469 0.0226              
+## (Intr) 3.6494 0.5325 0.5082 0.5293 0.2897       
+## year   0.6470 0.4754 0.6379 0.3155 0.3922 0.0147
+## 
+## Survival Outcome:
+##                                   Mean  StDev    2.5%  97.5%      P   Rhat
+## sexfemale                      -1.2192 0.9752 -3.0387 0.7443 0.2093 1.0389
+## slope(log(serBilir))            2.6889 2.4459 -2.2437 7.3691 0.2390 1.0830
+## slope(log(serBilir)):sexfemale  1.3902 2.4597 -3.4697 6.0745 0.5490 1.0745
+## area(prothrombin)               0.3091 0.2414 -0.1770 0.7698 0.2120 1.0351
+## value(ascites)                  0.5054 0.1440  0.2664 0.8485 0.0000 1.0616
+## 
+## Longitudinal Outcome: log(serBilir) (family = gaussian, link = identity)
+##                   Mean  StDev    2.5%  97.5%      P   Rhat
+## (Intercept)     0.6952 0.2775  0.1416 1.2431 0.0170 0.9997
+## year            0.2653 0.0756  0.1136 0.4166 0.0003 1.0013
+## sexfemale      -0.2346 0.2905 -0.7982 0.3409 0.4103 0.9996
+## year:sexfemale -0.0691 0.0780 -0.2240 0.0864 0.3647 1.0007
+## sigma           0.3925 0.0181  0.3629 0.4332 0.0000 1.0001
+## 
+## Longitudinal Outcome: prothrombin (family = gaussian, link = identity)
+##                   Mean  StDev    2.5%   97.5%      P   Rhat
+## (Intercept)    10.9328 0.4869  9.9665 11.8798 0.0000 1.0007
+## year            0.2482 0.1647 -0.0686  0.5760 0.1270 1.0000
+## sexfemale      -0.3846 0.5136 -1.3682  0.6602 0.4387 1.0007
+## year:sexfemale  0.0514 0.1730 -0.2889  0.3917 0.7537 0.9997
+## sigma           1.0852 0.0277  1.0364  1.1462 0.0000 1.0011
+## 
+## Longitudinal Outcome: ascites (family = binomial, link = logit)
+##                Mean  StDev    2.5%   97.5%      P   Rhat
+## (Intercept) -5.4661 1.3248 -8.1874 -3.0529 0.0000 1.0096
+## year         0.7700 0.1944  0.4068  1.1784 0.0000 1.0075
+## sexfemale   -0.3934 1.1865 -2.7200  1.9752 0.7273 1.0046
+## 
+## MCMC summary:
+## chains: 3 
+## iterations per chain: 12000 
+## burn-in per chain: 2000 
+## thinning: 5 
+## time: 1.9 min
+```
+]
+
+---
+
+## Competing Risks
+
+Bring the data in the competing risks long format
+
+
+```r
+pbc2.idCR &lt;- crisk_setup(pbc2.id, statusVar = "status", censLevel = "alive", 
+                    nameStrata = "CR")
+
+pbc2.idCR[pbc2.idCR$id %in% c(1, 2, 5), c("id", "years", "status", "status2", "CR")]
+```
+
+```
+##     id     years       status status2           CR
+## 1    1  1.095170         dead       1         dead
+## 1.1  1  1.095170         dead       0 transplanted
+## 2    2 14.152338        alive       0         dead
+## 2.1  2 14.152338        alive       0 transplanted
+## 5    5  4.120578 transplanted       0         dead
+## 5.1  5  4.120578 transplanted       1 transplanted
+```
+
+---
+
+## Competing Risks
+
+&lt;br&gt;
+
+Fit a competing risks Cox model
+
+
+```r
+CoxFit_CR &lt;- coxph(Surv(years, status2) ~ (age + drug) * strata(CR),
+                     data = pbc2.idCR)
+```
+
+---
+
+## Competing Risks
+
+&lt;br&gt;
+
+Fit the competing risks joint model
+
+
+```r
+jFit_CR &lt;- jm(CoxFit_CR, fm1, time_var = "year", 
+              functional_forms = ~ value(log(serBilir)):CR, 
+              n_iter = 25000L, n_burnin = 5000L, n_thin = 5L)
+```
+
+---
+
+## Competing Risks
+
+.scroll450[
+
+```r
+summary(jFit_CR)
+```
+
+```
+## 
+## Call:
+## jm(Surv_object = CoxFit_CR, Mixed_objects = fm1, time_var = "year", 
+##     functional_forms = ~value(log(serBilir)):CR, n_iter = 25000L, 
+##     n_burnin = 5000L, n_thin = 5L)
+## 
+## Data Descriptives:
+## Number of Groups: 312		Number of events: 169 (27.1%)
+## Number of Observations:
+##   log(serBilir): 1945
+## 
+##                  DIC     WAIC      LPML
+## marginal    4881.676 10552.87 -4516.975
+## conditional 5207.877 12913.72 -8536.796
+## 
+## Random-effects covariance matrix:
+##                     
+##        StdDev   Corr
+## (Intr) 1.0089 (Intr)
+## year   0.1814 0.3638
+## 
+## Survival Outcome:
+##                                        Mean  StDev    2.5%   97.5%      P
+## age                                 -0.0510 0.0235 -0.0987 -0.0066 0.0235
+## drugD-penicil                       -0.4166 0.4187 -1.2369  0.4109 0.3285
+## age:strata(CR)dead                   0.1084 0.0220  0.0684  0.1534 0.0000
+## drugD-penicil:strata(CR)dead         0.3854 0.4574 -0.5158  1.2635 0.4013
+## value(log(serBilir)):CRtransplanted  1.0715 0.2039  0.6865  1.4882 0.0000
+## value(log(serBilir)):CRdead          1.3007 0.1215  1.0710  1.5426 0.0000
+##                                       Rhat
+## age                                 1.0129
+## drugD-penicil                       1.0124
+## age:strata(CR)dead                  1.0257
+## drugD-penicil:strata(CR)dead        1.0116
+## value(log(serBilir)):CRtransplanted 1.0165
+## value(log(serBilir)):CRdead         1.0249
+## 
+## Longitudinal Outcome: log(serBilir) (family = gaussian, link = identity)
+##                   Mean  StDev    2.5%  97.5%      P   Rhat
+## (Intercept)     0.7227 0.3250  0.0863 1.3668 0.0288 1.0003
+## year            0.2588 0.1035  0.0534 0.4655 0.0153 1.0006
+## sexfemale      -0.2630 0.3375 -0.9236 0.4002 0.4302 1.0001
+## year:sexfemale -0.0826 0.1070 -0.2980 0.1296 0.4218 1.0006
+## sigma           0.4067 0.0240  0.3696 0.4644 0.0000 1.0009
+## 
+## MCMC summary:
+## chains: 3 
+## iterations per chain: 25000 
+## burn-in per chain: 5000 
+## thinning: 5 
+## time: 4.9 min
+```
+]
+
+---
+
+## More Features
+
+.three-cols[
+
+&lt;button class="modal-button" href="#GLMMs"&gt;&lt;strong&gt;Mixed Effects Models&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="GLMMs" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  &lt;ul&gt;
+  &lt;li&gt;Gaussian (&lt;code&gt;lme(...)&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;Student's-t (&lt;code&gt;mixed_model(..., &lt;span class="hljs-string"&gt;family = students.t(df = 4)&lt;/span&gt;)&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;Beta (&lt;code&gt;mixed_model(..., &lt;span class="hljs-string"&gt;family = beta.fam()&lt;/span&gt;)&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;Gamma (&lt;code&gt;mixed_model(..., &lt;span class="hljs-string"&gt;family = Gamma()&lt;/span&gt;)&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;censored Gaussian (&lt;code&gt;mixed_model(..., &lt;span class="hljs-string"&gt;family = censored.normal()&lt;/span&gt;)&lt;/code&gt;)&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;br&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Binomial (&lt;code&gt;mixed_model(..., &lt;span class="hljs-string"&gt;family = binomial()&lt;/span&gt;)&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;Poisson (&lt;code&gt;mixed_model(..., &lt;span class="hljs-string"&gt;family = poisson()&lt;/span&gt;)&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;Negative Binomial (&lt;code&gt;mixed_model(..., &lt;span class="hljs-string"&gt;family = negative.binomial()&lt;/span&gt;)&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;Beta Binomial (&lt;code&gt;mixed_model(..., &lt;span class="hljs-string"&gt;family = beta.binomial()&lt;/span&gt;)&lt;/code&gt;)&lt;/li&gt;
+  &lt;/ul&gt;
+  
+  &lt;a href="https://drizopoulos.github.io/JMbayes2/articles/Non_Gaussian_Mixed_Models.html"&gt;&lt;i class="fas fa-globe-americas"&gt;&lt;/i&gt; vignette distributions&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button class="modal-button" href="#Plots"&gt;&lt;strong&gt;Diagnostics&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="Plots" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  &lt;ul&gt;
+    &lt;li&gt;MCMC chains (&lt;code&gt;traceplot()&lt;/code&gt; or &lt;code&gt;ggtraceplot()&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;Density (&lt;code&gt;traceplot()&lt;/code&gt; or &lt;code&gt;ggtraceplot()&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;Gelman-Rubin (&lt;code&gt;gelman_diag()&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;cumulative plot (&lt;code&gt;cumuplot()&lt;/code&gt;)&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+]
+
+.three-cols[
+
+&lt;button class="modal-button" href="#Penalties"&gt;&lt;strong&gt;Shrinkage Priors&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="Penalties" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+      Using the &lt;strong&gt;priors&lt;/strong&gt; argument we can specify penalties:
+  &lt;pre&gt;&lt;code class="r hljs remark-code"&gt;
+  &lt;div class="remark-code-line"&gt;jm(..., &lt;span class="hljs-number"&gt;priors = list("penalty_alphas" = "horseshoe")&lt;/span&gt;)&lt;/div&gt;
+  &lt;div class="remark-code-line"&gt;&lt;/div&gt;
+  &lt;div class="remark-code-line"&gt;jm(..., &lt;span class="hljs-number"&gt;priors = list("penalty_gammas" = "ridge")&lt;/span&gt;)&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button class="modal-button" href="#Compare"&gt;&lt;strong&gt;Model Comparison&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="Compare" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+      Using the &lt;code&gt;compare_jm()&lt;/code&gt; function we can compare fitted joint models using DIC, WAIC and LPML
+  &lt;pre&gt;&lt;code class="r hljs remark-code"&gt;
+  &lt;div class="remark-code-line"&gt;&lt;span class="hljs-number"&gt;fit1&lt;/span&gt; &lt;- jm(&lt;span class="hljs-number"&gt;CoxModel1&lt;/span&gt;, &lt;span class="hljs-number"&gt;MixedModels1&lt;/span&gt;, ...)&lt;/div&gt;
+  &lt;div class="remark-code-line"&gt;&lt;span class="hljs-string"&gt;fit2&lt;/span&gt; &lt;- jm(&lt;span class="hljs-string"&gt;CoxModel2&lt;/span&gt;, &lt;span class="hljs-string"&gt;MixedModels2&lt;/span&gt;, ...)&lt;/div&gt;
+  &lt;div class="remark-code-line"&gt;&lt;/div&gt;
+  &lt;div class="remark-code-line"&gt;compare_jm(&lt;span class="hljs-number"&gt;fit1&lt;/span&gt;, &lt;span class="hljs-string"&gt;fit2&lt;/span&gt;)&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+]
+
+.three-cols[
+&lt;button class="modal-button" href="#DynPred"&gt;&lt;strong&gt;Dynamic Predictions&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="DynPred" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  Using the &lt;code&gt;predict()&lt;/code&gt; method we can calculate (dynamic) predictions
+  &lt;ul&gt;
+    &lt;li&gt;Longitudinal outcomes&lt;/li&gt;
+    &lt;li&gt;Event outcomes (including competing risks)&lt;/li&gt;
+    &lt;li&gt;Accuracy measures&lt;/li&gt;
+      &lt;ul&gt;
+        &lt;li&gt;discrimination: &lt;code&gt;tvROC()&lt;/code&gt;, &lt;code&gt;tvAUC()&lt;/code&gt;&lt;/li&gt;
+        &lt;li&gt;calibration: &lt;code&gt;calibration_plot()&lt;/code&gt;, &lt;code&gt;calibration_metrics()&lt;/code&gt;&lt;/li&gt;
+        &lt;li&gt;overall: &lt;code&gt;tvBrier()&lt;/code&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+  &lt;/ul&gt;
+  
+  &lt;a href="https://drizopoulos.github.io/JMbayes2/articles/Dynamic_Predictions.html"&gt;&lt;i class="fas fa-globe-americas"&gt;&lt;/i&gt; vignette predictions&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;button class="modal-button" href="#MCEvents"&gt;&lt;strong&gt;Multi-State Processes&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="MCEvents" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  &lt;strong&gt;To-Do&lt;/strong&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Longitudinal outcomes&lt;/li&gt;
+    &lt;li&gt;Relative risk model with a frailty term for recurrent events&lt;/li&gt;
+    &lt;li&gt;Relative risk model terminating event linked with frailty&lt;/li&gt;
+  &lt;/ul&gt;
+  
+  &lt;a href="https://drizopoulos.github.io/JMbayes2/articles/Multi_State_Processes.html"&gt;&lt;i class="fas fa-globe-americas"&gt;&lt;/i&gt; vignette multi-state&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;button class="modal-button" href="#RecEvents"&gt;&lt;strong&gt;Recurrent Events&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="RecEvents" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  Using &lt;code&gt;jm(..., &lt;span class="hljs-string"&gt;recurrent = "..."&lt;/span&gt;)&lt;/code&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Longitudinal outcomes&lt;/li&gt;
+    &lt;li&gt;Relative risk model with a frailty term for recurrent events&lt;/li&gt;
+    &lt;li&gt;Relative risk model terminating event linked with frailty&lt;/li&gt;
+    &lt;li&gt;Gap time and Calendar time formulations&lt;/li&gt;
+  &lt;/ul&gt;
+  
+  &lt;a href="https://drizopoulos.github.io/JMbayes2/articles/Recurring_Events.html"&gt;&lt;i class="fas fa-globe-americas"&gt;&lt;/i&gt; vignette recurrent&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+]
+
+---
+class: center, middle
+
+.nord0box[
+More about **JMbayes2** in the dedicated website&lt;br&gt;&lt;br&gt;
+&lt;a href="https://drizopoulos.github.io/JMbayes2/"&gt;&lt;i class="fas fa-globe-americas"&gt;&lt;/i&gt; https://drizopoulos.github.io/JMbayes2/&lt;/a&gt;
+]
+
+---
+class: the-end, center, middle
+layout: true
+count: false
+
+## Thank you for your attention!
+
+
+&lt;div id="contact"&gt;
+&lt;a href="mailto:d.rizopoulos@erasmusmc.nl"&gt;&lt;i class="fas fa-envelope"&gt;&lt;/i&gt; d.rizopoulos@erasmusmc.nl&lt;/a&gt; &amp;emsp;
+&lt;a href="https://twitter.com/drizopoulos"&gt;&lt;i class="fab fa-twitter"&gt;&lt;/i&gt; drizopoulos&lt;/a&gt; &amp;emsp;
+&lt;a href="https://github.com/drizopoulos"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt; drizopoulos&lt;/a&gt; &amp;emsp;
+&lt;a href="http://www.drizopoulos.com/"&gt;&lt;i class="fas fa-globe-americas"&gt;&lt;/i&gt; http://www.drizopoulos.com/&lt;/a&gt;
+&lt;/div&gt;
+
+---
+count: false
+
+&lt;!-- &lt;script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'&gt;&lt;/script&gt; --&gt;
+&lt;script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"&gt;
+&lt;/script&gt;
+ 
+ 
+&lt;script&gt;
+// Get the button that opens the modal
+var btn = document.querySelectorAll("button.modal-button");
+
+// All page modals
+var modals = document.querySelectorAll('.modal');
+
+// Get the &lt;span&gt; element that closes the modal
+var spans = document.getElementsByClassName("close");
+
+// When the user clicks the button, open the modal
+for (var i = 0; i &lt; btn.length; i++) {
+ btn[i].onclick = function(e) {
+    e.preventDefault();
+    modal = document.querySelector(e.target.getAttribute("href"));
+    modal.style.display = "block";
+ }
+}
+
+// When the user clicks on &lt;span&gt; (x), close the modal
+for (var i = 0; i &lt; spans.length; i++) {
+ spans[i].onclick = function() {
+    for (var index in modals) {
+      if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";    
+    }
+ }
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+     for (var index in modals) {
+      if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";    
+     }
+    }
+}
+&lt;/script&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "nord",
+"highlightLines": true,
+"highlightSpans": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
