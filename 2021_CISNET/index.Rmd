@@ -658,11 +658,10 @@ summary(jFit_CR)
 <div id="MCEvents" class="modal">
   <div class="modal-content">
   <span class="close">&times;</span>
-  <strong>To-Do</strong>
+  <strong>Using <code>mc_setup()</code> to setup the data and fitting a stratified Cox model</strong>
   <ul>
-    <li>Longitudinal outcomes</li>
-    <li>Relative risk model with a frailty term for recurrent events</li>
-    <li>Relative risk model terminating event linked with frailty</li>
+    <li>Multiple longitudinal outcomes</li>
+    <li>Relative risk model per transition</li>
   </ul>
   
   <a href="https://drizopoulos.github.io/JMbayes2/articles/Multi_State_Processes.html"><i class="fas fa-globe-americas"></i> vignette multi-state</a>
@@ -674,9 +673,10 @@ summary(jFit_CR)
 <div id="RecEvents" class="modal">
   <div class="modal-content">
   <span class="close">&times;</span>
-  Using <code>jm(..., <span class="hljs-string">recurrent = "..."</span>)</code>
+  Using <code>rc_setup()</code> to setup the data, fitting a stratified Cox model 
+  and calling <code>jm(..., <span class="hljs-string">recurrent = "..."</span>)</code>
   <ul>
-    <li>Longitudinal outcomes</li>
+    <li>Multiple longitudinal outcomes</li>
     <li>Relative risk model with a frailty term for recurrent events</li>
     <li>Relative risk model terminating event linked with frailty</li>
     <li>Gap time and Calendar time formulations</li>

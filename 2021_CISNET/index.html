@@ -848,11 +848,10 @@ summary(jFit_CR)
 &lt;div id="MCEvents" class="modal"&gt;
   &lt;div class="modal-content"&gt;
   &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
-  &lt;strong&gt;To-Do&lt;/strong&gt;
+  &lt;strong&gt;Using &lt;code&gt;mc_setup()&lt;/code&gt; to setup the data and fitting a stratified Cox model&lt;/strong&gt;
   &lt;ul&gt;
-    &lt;li&gt;Longitudinal outcomes&lt;/li&gt;
-    &lt;li&gt;Relative risk model with a frailty term for recurrent events&lt;/li&gt;
-    &lt;li&gt;Relative risk model terminating event linked with frailty&lt;/li&gt;
+    &lt;li&gt;Multiple longitudinal outcomes&lt;/li&gt;
+    &lt;li&gt;Relative risk model per transition&lt;/li&gt;
   &lt;/ul&gt;
   
   &lt;a href="https://drizopoulos.github.io/JMbayes2/articles/Multi_State_Processes.html"&gt;&lt;i class="fas fa-globe-americas"&gt;&lt;/i&gt; vignette multi-state&lt;/a&gt;
@@ -864,9 +863,10 @@ summary(jFit_CR)
 &lt;div id="RecEvents" class="modal"&gt;
   &lt;div class="modal-content"&gt;
   &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
-  Using &lt;code&gt;jm(..., &lt;span class="hljs-string"&gt;recurrent = "..."&lt;/span&gt;)&lt;/code&gt;
+  Using &lt;code&gt;rc_setup()&lt;/code&gt; to setup the data, fitting a stratified Cox model 
+  and calling &lt;code&gt;jm(..., &lt;span class="hljs-string"&gt;recurrent = "..."&lt;/span&gt;)&lt;/code&gt;
   &lt;ul&gt;
-    &lt;li&gt;Longitudinal outcomes&lt;/li&gt;
+    &lt;li&gt;Multiple longitudinal outcomes&lt;/li&gt;
     &lt;li&gt;Relative risk model with a frailty term for recurrent events&lt;/li&gt;
     &lt;li&gt;Relative risk model terminating event linked with frailty&lt;/li&gt;
     &lt;li&gt;Gap time and Calendar time formulations&lt;/li&gt;
