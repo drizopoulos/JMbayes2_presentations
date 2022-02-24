@@ -487,15 +487,15 @@ jointFit3 <- update(jointFit2,
 
 .pull-left[
 **Slope**
-$$h_i(t) = h_0(t) \exp\biggl\{\alpha \bbox[#2E3440, 5pt]{\frac{d\color{var(--nord14)}{\eta(t)}}{dt}}\biggr\}$$
+$$h_i(t) = h_0(t) \exp\biggl\{\alpha \bbox[#2E3440, 5pt]{\frac{d\color{var(--nord14)}{\eta_i(t)}}{dt}}\biggr\}$$
 ]
 
 .pull-right[
 **(normalized) Area**
-$$h_i(t) = h_0(t) \exp\biggl\{\alpha \bbox[#2E3440, 5pt]{\frac{1}{t} \int_0^t \color{var(--nord14)}{\eta(s)}\; ds}\biggr\}$$
+$$h_i(t) = h_0(t) \exp\biggl\{\alpha \bbox[#2E3440, 5pt]{\frac{1}{t} \int_0^t \color{var(--nord14)}{\eta_i(s)}\; ds}\biggr\}$$
 ]
 
-<div align="center" style="padding-top:30px;">\(\color{var(--nord3)}{\eta(t) = \mathbf x_i(t)^\top \boldsymbol \beta + \mathbf z_i(t)^\top \mathbf b_i}\)</div>
+<div align="center" style="padding-top:30px;">\(\color{var(--nord3)}{\eta_i(t) = \mathbf x_i(t)^\top \boldsymbol \beta + \mathbf z_i(t)^\top \mathbf b_i}\)</div>
 
 ---
 
