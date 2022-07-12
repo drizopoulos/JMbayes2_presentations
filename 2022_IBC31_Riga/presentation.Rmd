@@ -1,0 +1,2258 @@
+---
+title: Extended Joint Models under<br>the Bayesian Approach using &nbsp;JMbayes2
+author: Pedro Miranda Afonso, Grigorios Papageorgiou, Dimitris Rizopoulos <br> <font size="4">Department of Biostatistics, Erasmus University Medical Center, The Netherlands
+date: <br>31<sup>st</sup> International Biometric Conference | Riga, July 2022
+output:
+  ioslides_presentation:
+    css: style.css
+    smaller: yes
+    transition: 0
+    widescreen: yes
+    logo: Figures/logo_emc.png
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r functions, include = FALSE}
+col_f <- function(color, percent = 50) {
+  rgb.col <- col2rgb(color)
+  new.col <- rgb(rgb.col[1], rgb.col[2], rgb.col[3], max = 255,
+                 alpha = (100 - percent) * 255 / 100)
+  return(new.col)
+}
+```
+
+## Motivation
+
+<br>
+
+$$
+\large\require{color}\mathcal{p}\left(y, t,\colorbox{#F5842070}{$b$}\right)=\mathcal{p}\left( y\mid\colorbox{#F5842070}{$b$}\right)\mathcal{p}\left( t\mid\colorbox{#F5842070}{$b$}\right)\mathcal{p}\left(\colorbox{#F5842070}{$b$}\right),
+$$
+
+<br>
+
+$$
+\large\colorbox{#F5842070}{$b$} \sim \mathcal{N} \left(0, D\right).
+$$
+<br>
+<br>
+
+- \(\colorbox{#F5842070}{$b$}\) explain all interrelationships.
+
+ - Mathematically convenient, but computationally intensive.
+
+
+## Motivation
+
+<center>
+<table class="tab">
+    <tr>
+    <th></th>
+    <th class = "g1" colspan = "3">Maximum Likelihood</th>
+    <th class = "w1" colspan = "3">Bayesian</th>
+  </tr>
+  <tr>
+    <th></th>
+    <th class = "g2"><b>joineRML</b></th>
+    <th class = "g2">frailtyPack</th>
+    <th class = "g2">JM</th>
+    <th class = "w2">JMbayes</th>
+    <th class = "w2">stan_jm</th>
+    <th class = "w2">jm_bamlss</th>
+  </tr>
+  <tr>
+    <td class = "wg2">Multiple biomarkers</td>
+    <td class = "gg" align = "center">&#9679;</td>
+    <td class = "gg"></td>
+    <td class = "gg"></td>
+    <td class = "wg" align = "center">&#9679;</td>
+    <td class = "wg" align = "center">&#9679;</td>
+    <td class = "wg"></td>
+  </tr>
+    <tr>
+    <td class = "wg2">Different distributions</td>
+    <td class = "gg"></td>
+    <td class = "gg"></td>
+    <td class = "gg"></td>
+    <td class = "wg" align = "center">&#9679;</td>
+    <td class = "wg" align = "center">&#9679;</td>
+    <td class = "wg"></td>
+  </tr>
+  <tr>
+    <td class = "wg2">Multiple association forms</td>
+    <td class = "gg"></td>
+    <td class = "gg"></td>
+    <td class = "gg" align = "center">&#9679;</td>
+    <td class = "wg" align = "center">&#9679;</td>
+    <td class = "wg" align = "center">&#9679;</td>
+    <td class = "wg" align = "center">&#9679;</td>
+  </tr>
+    <tr>
+    <td class = "wg2">Multiple failure times</td>
+    <td class = "gg"></td>
+    <td class = "go" align = "center">&#9679;</td>
+    <td class = "go" align = "center">&#9679;</td>
+    <td class = "wo" align = "center">&#9679;</td>
+    <td class = "wo"></td>
+    <td class = "wo"></td>
+  </tr>
+  <tr>
+    <td class = "wg2">Dynamic predictions</td>
+    <td class = "gg"></td>
+    <td class = "gg" align = "center">&#9679;</td>
+    <td class = "gg" align = "center">&#9679;</td>
+    <td class = "wg" align = "center">&#9679;</td>
+    <td class = "wg" align = "center">&#9679;</td>
+    <td class = "wg" align = "center">&#9679;</td>
+    <td></td>
+  </tr>
+</table>
+</center>
+
+## A New Package
+
+<div style="float: left; width: 50%;">
+
+- **Free and open source**: R ecosystem;
+
+- **Comprehensive**: covering (almost) all available extensions in one place;
+
+- **Complete**: providing support functions;
+
+- **User-friendly**: 
+  straightforward syntax, and
+  detailed documentation;
+
+- **Fast**.
+
+</div></center>
+
+</div>
+
+<div style="float: right; width: 50%;">
+</div>
+
+## A New Package
+
+<div style="float: left; width: 50%;">
+
+- **Free and open source**: R ecosystem;
+
+- **Comprehensive**: covering (almost) all available extensions in one place;
+
+- **Complete**: providing support functions;
+
+- **User-friendly**: 
+  straightforward syntax, and
+  detailed documentation;
+  
+- **Fast**.
+
+<br>  
+<center><div style="width: 100%; background: #F7F6F6;">
+<br>
+<font size=5.5><a href="https://drizopoulos.github.io/JMbayes2/" size=5.5>drizopoulos.github.io/JMbayes2</a></font>
+<br><br>
+</div></center>
+
+</div>
+
+<div style="float: right; width: 50%;">
+<center><a href="https://drizopoulos.github.io/JMbayes2/"><img src="Figures/logo_jmbayes2.gif" width="400px"/></a></center>
+</div>
+
+
+## Development
+
+Estimation:
+
+- Bayesian paradigm;
+
+- Metropolis-Hastings and Robbins–Monro algorithms;
+  
+<br>
+
+Implementation:
+
+- MCMC in C++;
+  
+- Parallel sampling of random effects.
+
+- Parallel MCMC chains.
+
+## Development
+
+<div style="float: left; width: 60%;">
+
+Estimation:
+
+- Bayesian paradigm;
+
+- Metropolis-Hastings and Robbins–Monro algorithms;
+  
+<br>
+
+Implementation:
+
+- MCMC in C++;
+  
+- Parallel sampling of random effects.
+
+- Parallel MCMC chains.
+
+</div>
+
+<div style="float: right; width: 40%;">
+
+```{r dv1, echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE}
+library(JMbayes2)
+pbc2.id$status2 <- as.numeric(pbc2.id$status != 'alive')
+CoxFit <- coxph(Surv(years, status2) ~ sex, data = pbc2.id)
+fm1 <- lme(log(serBilir) ~ year * sex, data = pbc2, random = ~ year | id)
+jointFit <- jm(CoxFit, fm1, time_var = "year", n_burnin = 100)
+mcmc <- jointFit$mcmc$betas1
+mcmc_m <- do.call(rbind, mcmc)
+
+```
+
+```{r dv2, fig.align = "center", cache = TRUE, fig.width = 4, fig.height = 4, animation.hook = "gifski", interval = 0.1, dependson = c("dv1")}
+
+col1 <- "#D36EAB"
+col2 <- "#F58420" 
+col3 <- "#F05863"
+niter <- 100 #nrow(mcmc[[1]])
+library(scatterplot3d)
+for(i in seq_len(niter)) {
+  p3d <- scatterplot3d(x = mcmc_m[seq_len(niter), 2], 
+                       y = mcmc_m[seq_len(niter), 3], 
+                       z = mcmc_m[seq_len(niter), 1], 
+                       color = 2, cex.symbol = 0, angle = 40, grid = FALSE,
+                       xlab = "", ylab = "", zlab = "",
+                       label.tick.marks = FALSE, mar = c(1, 1, 1, 1))
+  text(x = 3, y = -0.3, expression(beta[1]), srt = 0, xpd = NA, cex = 1.25)
+  text(x = -1.6, y = 2, expression(beta[3]), srt = 0, xpd = NA, cex = 1.25)
+  text(x = 8.75, y = 0.8, expression(beta[2]), srt = 45, cex = 1.25)
+  
+  if(i == 1) {
+    p3d$points3d(x = mcmc[[1]][1, 2], 
+                 y = mcmc[[1]][1, 3], 
+                 z = mcmc[[1]][1, 1], 
+                 type = "p", col = col_f(col1, 80), pch = 20, cex = 0.5)
+    p3d$points3d(x = mcmc[[2]][1, 2], 
+                 y = mcmc[[2]][1, 3], 
+                 z = mcmc[[2]][1, 1], 
+                 type = "p", col = col_f(col2, 80), pch = 20, cex = 0.5)
+    p3d$points3d(x = mcmc[[3]][1, 2], 
+                 y = mcmc[[3]][1, 3], 
+                 z = mcmc[[3]][1, 1], 
+                 type = "p", col = col_f(col3, 80), pch = 20, cex = 0.5)
+  } else {
+    p3d$points3d(x = mcmc[[1]][seq_len(i), 2], 
+                 y = mcmc[[1]][seq_len(i), 3], 
+                 z = mcmc[[1]][seq_len(i), 1], 
+                 type = "l", col = col1, lwd = 2)
+    p3d$points3d(x = mcmc[[2]][seq_len(i), 2], 
+                 y = mcmc[[2]][seq_len(i), 3], 
+                 z = mcmc[[2]][seq_len(i), 1], 
+                 type = "l", col = col2, lwd = 2)
+    p3d$points3d(x = mcmc[[3]][seq_len(i), 2], 
+                 y = mcmc[[3]][seq_len(i), 3], 
+                 z = mcmc[[3]][seq_len(i), 1], 
+                 type = "l", col = col3, lwd = 2)
+  }
+  
+}
+
+
+```
+
+</div>
+
+## An Example 
+
+$${\require{color}
+\begin{cases}
+y_i(t)= \colorbox{#F5842070}{$\boldsymbol x_i(t)^\top\boldsymbol\beta + \boldsymbol z_i(t)^\top \mathbf b_i$} + \varepsilon_i(t) = \colorbox{#F5842070}{$\eta_i(t)$} + \varepsilon(t) & \text{Longitudinal process}\\
+h_i(t)= h_0(t)\exp\left\{ \boldsymbol w_i(t)^\top \boldsymbol \gamma + \colorbox{#F5842070}{$\eta_i(t)$} \alpha \right\} & \text{Event process}\\
+\end{cases}
+}
+$$
+
+<br>
+
+$$
+\mathbf b_i \sim \mathcal{N} \left(\boldsymbol 0, \mathbf D \right), \qquad
+\varepsilon_i(t) \sim \mathcal{N} \left(0, \sigma^2\right), \qquad i=1,\dots,n \text{ individuals}.
+$$
+
+<div style="height:20px;font-size:20px;">&nbsp;</div>
+
+<pre>
+<code>
+<br>
+<br>
+<br>
+<br>
+</code>
+</pre>
+
+## An Example 
+
+$${\require{color}
+\begin{cases}
+y_i(t)= \colorbox{#FFFFFF}{$\boldsymbol x_i(t)^\top\boldsymbol\beta + \boldsymbol z_i(t)^\top \mathbf b_i$} + \varepsilon_i(t) = \colorbox{#FFFFFF}{$\eta_i(t)$} + \varepsilon(t) & \text{Longitudinal process}\\
+h_i(t)= h_0(t)\exp\left\{ \boldsymbol w_i(t)^\top \boldsymbol \gamma + \colorbox{#FFFFFF}{$\eta_i(t)$} \alpha \right\} & \text{Event process}\\
+\end{cases}
+}
+$$
+
+<br>
+
+$$
+\mathbf b_i \sim \mathcal{N} \left(\boldsymbol 0, \mathbf D \right), \qquad
+\varepsilon_i(t) \sim \mathcal{N} \left(0, \sigma^2\right), \qquad i=1,\dots,n \text{ individuals}.
+$$
+
+<div style="height:20px;font-size:20px;">&nbsp;</div>
+
+<pre>
+<code>
+library(<mark class="c4">JMbayes2</mark>)<br>
+<mark class="hc1">long_fit</mark> <- lme(y ~ <mark class="hc3">time</mark> + group, long_data, ~ time | id)<br>
+<br>
+<br>
+</code>
+</pre>
+
+## An Example 
+
+$${\require{color}
+\begin{cases}
+y_i(t)= \colorbox{#FFFFFF}{$\boldsymbol x_i(t)^\top\boldsymbol\beta + \boldsymbol z_i(t)^\top \mathbf b_i$} + \varepsilon_i(t) = \colorbox{#FFFFFF}{$\eta_i(t)$} + \varepsilon(t) & \text{Longitudinal process}\\
+h_i(t)= h_0(t)\exp\left\{ \boldsymbol w_i(t)^\top \boldsymbol \gamma + \colorbox{#FFFFFF}{$\eta_i(t)$} \alpha \right\} & \text{Event process}\\
+\end{cases}
+}
+$$
+
+<br>
+
+$$
+\mathbf b_i \sim \mathcal{N} \left(\boldsymbol 0, \mathbf D \right), \qquad
+\varepsilon_i(t) \sim \mathcal{N} \left(0, \sigma^2\right), \qquad i=1,\dots,n \text{ individuals}.
+$$
+
+<div style="height:20px;font-size:20px;">&nbsp;</div>
+
+<pre>
+<code>
+library(<mark class="c4">JMbayes2</mark>)<br>
+<mark class="hc1">long_fit</mark> <- lme(y ~ <mark class="hc3">time</mark> + group, long_data, ~ time | id)<br>
+<mark class="hc2">ter_fit</mark>  <- coxph(Surv(tstop, status) ~ group, ter_data)<br>
+<br>
+</code>
+</pre>
+
+
+
+## An Example 
+
+$${\require{color}
+\begin{cases}
+y_i(t)= \colorbox{#FFFFFF}{$\boldsymbol x_i(t)^\top\boldsymbol\beta + \boldsymbol z_i(t)^\top \mathbf b_i$} + \varepsilon_i(t) = \colorbox{#FFFFFF}{$\eta_i(t)$} + \varepsilon(t) & \text{Longitudinal process}\\
+h_i(t)= h_0(t)\exp\left\{ \boldsymbol w_i(t)^\top \boldsymbol \gamma + \colorbox{#FFFFFF}{$\eta_i(t)$} \alpha \right\} & \text{Event process}\\
+\end{cases}
+}
+$$
+
+<br>
+
+$$
+\mathbf b_i \sim \mathcal{N} \left(\boldsymbol 0, \mathbf D \right), \qquad
+\varepsilon_i(t) \sim \mathcal{N} \left(0, \sigma^2\right), \qquad i=1,\dots,n \text{ individuals}.
+$$
+
+<div style="height:20px;font-size:20px;">&nbsp;</div>
+
+<pre>
+<code>
+library(<mark class="c4">JMbayes2</mark>)<br>
+<mark class="hc1">long_fit</mark> <- lme(y ~ <mark class="hc3">time</mark> + group, long_data, ~ time | id)<br>
+<mark class="hc2">ter_fit</mark>  <- coxph(Surv(tstop, status) ~ group, ter_data)<br>
+jm_fit   <- jm(<mark class="hc2">ter_fit</mark>, <mark class="hc1">long_fit</mark>, '<mark class="hc3">time</mark>')<br>
+</code>
+</pre>
+
+```{r example1a, cache = TRUE, message = FALSE, warning = FALSE, include = FALSE, echo = FALSE}
+
+library("JMbayes2")
+long_fit <- lme(log(serBilir) ~ year + sex, pbc2, ~ year | id)
+ter_fit  <- coxph(Surv(years, status2) ~ sex, pbc2.id)
+jm_fit   <- jm(ter_fit, long_fit, 'year')
+
+```
+
+
+## An Example 
+
+<pre>
+<code>
+summary(jm_fit)<br>
+</code>
+</pre>
+<article>
+<pre>
+ ## Call:
+ ## jm(Surv_object = ter_fit, Mixed_objects = long_fit, time_var = 'year')
+ ## 
+ ## Data Descriptives:
+ ## Number of Groups: 312        Number of events: 140 (44.9%)
+ ## Number of Observations:
+ ##   log(serBilir): 1945
+ ## 
+ ##                  DIC     WAIC      LPML
+ ## marginal    4400.430 5288.656 -4037.448
+ ## conditional 4571.205 6412.573 -5511.117
+ <mark class="c2">## 
+ ## Random-effects covariance matrix:
+ ##                     
+ ##        StdDev   Corr
+ ## (Intr) 1.0100 (Intr)
+ ## year   0.1823 0.3714</mark>
+ <mark class="c3">## 
+ ## Survival Outcome:
+ ##                         Mean  StDev    2.5%  97.5%      P   Rhat
+ ## sexfemale            -0.2747 0.3945 -1.0233 0.5175 0.4882 1.0138
+ ## value(log(serBilir))  1.2126 0.1100  0.9932 1.4357 0.0000 1.0082</mark>
+ <mark class="c1">## 
+ ## Longitudinal Outcome: log(serBilir) (family = gaussian, link = identity)
+ ##                Mean  StDev    2.5%  97.5%      P   Rhat
+ ## (Intercept)  0.6525 0.3062  0.0490 1.2563 0.0384 1.0051
+ ## year         0.1834 0.0293  0.1257 0.2399 0.0000 1.0017
+ ## sexfemale   -0.1803 0.3175 -0.8024 0.4480 0.5556 1.0054
+ ## sigma        0.3864 0.0176  0.3586 0.4299 0.0000 1.0084</mark>
+ ## 
+ ## MCMC summary:
+ ## chains: 3 
+ ## iterations per chain: 3500 
+ ## burn-in per chain: 500 
+ ## thinning: 1 
+ ## time: 35 sec
+</pre>
+</article>
+
+```{r example1b, dependson = c("example1a"), cache = TRUE, include = FALSE, echo = FALSE}
+summary(jm_fit)
+```
+
+<br>
+<br>
+
+## Model diagnostic
+
+
+<table class="tab">
+  <tr>
+    <th></th>
+    <th class = "w3">
+    - <mark>traceplot()</mark>
+    </th>
+    <th class = "w3">
+    - <mark>densplot()</mark>
+    </th>
+    <th class = "w3">
+    - <mark>cumuplot()</mark>
+    </th>
+    <th class = "w3">
+    - <mark>gelman_diag()</mark>
+    </th>
+  </tr>
+</table>
+
+
+<br>
+
+
+```{r traceplot, dependson = c("example1a"), cache = TRUE, fig.align = "center", fig.height = 3.25, cache = TRUE, animation.hook = "gifski", interval = 0.1}
+
+col1 <- "#D36EAB"
+col2 <- "#F58420" 
+col3 <- "#F05863"
+par <- "alphas"
+nf <- 100 # number of frames
+niter <- length(jm_fit$mcmc[[par]][[1]])
+fv <- sort(rep_len(seq_len(nf), length.out = niter))
+it <- seq_len(niter)
+c1 <- jm_fit$mcmc[[par]][[1]]
+c2 <- jm_fit$mcmc[[par]][[2]]
+c3 <- jm_fit$mcmc[[par]][[3]]
+ylim <- range(c1, c2, c3)
+xlim <- c(1, niter)
+for (c in 1:3) {
+  for(f in seq_len(nf)) {
+    par(mar = c(0, 0, 0, 0), oma = c(2, 2.5, 0.1, 0.1))
+    plot(NA, main = "", ylab = "", xlab = "", xlim = xlim, ylim = ylim, xaxt = "n", yaxt = "n")
+    axis(1, at = c(0, 1000, 2000, 3000))
+    axis(2, at = seq(0.8, 1.6, length.out = 4), 
+         labels = round(seq(0.8, 1.6, length.out = 4), 1), las = 1)
+    mtext("Iterations", side = 1, las = 1, line = 1)
+    mtext(bquote(alpha), side = 2, las = 1, line = 1.5)
+    bol <- fv <= f
+    if(c == 1) {
+      lines(it, c2, col = col2)
+      lines(it, c3, col = col3)
+      lines(it[bol], c1[bol], col = col1)
+    }
+    if(c == 2) {
+      lines(it, c1, col = col1)
+      lines(it, c3, col = col3)
+      lines(it[bol], c2[bol], col = col2)
+    }
+    if(c == 3) {
+      lines(it, c1, col = col1)
+      lines(it, c2, col = col2)
+      lines(it[bol], c3[bol], col = col3)
+    }
+  }
+}
+
+```
+
+<pre>
+<code>
+traceplot(jm_fit, "alphas")<br>
+</code>
+</pre>
+
+
+## Functional Forms
+
+$$\require{color}
+\begin{cases}
+y_i(t)= \colorbox{#D36EAB70}{$\color{#515151} \eta_i(t)$} + \varepsilon_i(t) \\
+h_i(t)= h_0(t)\exp\left\{ w_i(t)^\top \gamma + \stackrel{}{\boxed{\;\mathcal{f}\left\{\colorbox{#D36EAB70}{$\color{#515151}\eta_i(t)$}\right\}\;}} \alpha \right\}\\
+\end{cases},
+$$
+
+<br>
+
+$$
+\varepsilon_i(t) \sim \mathcal{N} \left(0, \sigma^2\right), \qquad i=1,\dots,n \text{ individuals}.
+$$
+
+<br>
+
+<pre>
+<code>
+jm_fit <- update(jm_fit, <mark class="hc3">functional_forms = ~ value(y)</mark>)<br>
+</code>
+</pre>
+
+## Functional Forms
+
+```{r ff1, fig.align = "center", animation.hook = "gifski", interval = 0.05, cache = TRUE, fig.width = 9, fig.height = 4.5}
+
+t <- seq(from = 0, to = 6, length.out = 200)
+f <- function(t) sin(t*pi/6 + pi/2) * 3 + 3
+y <- f(t)
+for(i in seq_along(t)) {
+  ##############################################################################
+  # top left
+  col <- "#F05863"
+  par(fig = c(0, 0.5, 0.5, 1), mar = c(0, 0, 0, 0), oma = c(3, 3, 0.75, 0.25))
+  tail <- seq(0, 1, 0.01)
+  ltail <- length(tail)
+  plot(t, y, type = 'l', xlim = c(0, 6),
+       yaxt = 'n', ylab = "", xaxt = "n", xlab = "")
+  axis(2, las = 1, at = seq(0, 6, 2))
+  mtext(expression(paste(eta[i], "(t)")), 2, las = 1, line = 1.5)
+  points(t[i]-tail, f(t[i]-tail), cex = seq(1.5, 0.5, length.out = ltail), 
+         pch = 21, bg = col_f(col, seq(90, 100, length.out = ltail)), 
+         col = NA, xpd = NA)
+  points(t[i], y[i], cex = 1.5, pch = 21, bg = col, col = NA, xpd = NA)
+  text(x = t[i], y = y[i], labels = round(y[i], 2), pos = 3, col = "white", 
+       xpd = NA, font = 2)
+  text(x = t[i], y = y[i], labels = round(y[i], 2), pos = 3, col = col, 
+       xpd = NA)
+  rect(xleft = 4.1, xright = 5.5, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  rect(xleft = 5.8, xright = 6, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  text(6, 5, "~ value(y)", family = "mono", cex = 1.5, adj = c(1, NA))
+  ##############################################################################
+  # top right
+  col <- "#D36EAB"
+  par(fig = c(0.5, 1, 0.5, 1), mar = c(0, 0, 0, 0), oma = c(3, 3, 0.75, 0.25), new = TRUE)
+  d <- function(y, t, digits = 3) {
+    dy <- round(diff(y)/diff(t), digits)
+    dt <- rowMeans(embed(t, 2))
+    data.frame(t = dt, y = dy)
+  }
+  dy <- d(y, t)
+  tail <- 1:20
+  ltail <- length(tail)
+  plot(t, y, type = 'l', xlim = c(0, 6),
+       yaxt = "n", ylab = "", xaxt = "n", xlab = "")
+  # l <- 1.5
+  # ang <- atan(dy$y[i])
+  # delta_x <- cos(ang) * l
+  # delta_y  <- sin(ang) * l
+  # ii <- c(i - tail)[c(i - tail) > 0]
+  # segments(x0 = dy$t[ii] - delta_x, y0 = f(dy$t[ii]) - delta_y, 
+  #          x1 = dy$t[ii] + delta_x, y1 = f(dy$t[ii]) + delta_y,
+  #          lwd = 2, col = col_f(col, seq(90, 100, length.out = ltail)), xpd = NA)
+  # segments(x0 = dy$t[i] - delta_x, y0 = f(dy$t[i]) - delta_y, 
+  #          x1 = dy$t[i] + delta_x, y1 = f(dy$t[i]) + delta_y,
+  #          lwd = 2, col = col, xpd = NA)
+  # points(dy$t[i], f(dy$t[i]), cex = 1.5, pch = 21, bg = col, col = col, xpd = NA)
+  # text(dy$t[i], f(dy$t[i]), labels = round(dy$y[i], 2), pos = 3, col = "white", 
+  #      xpd = NA, font = 2)
+  # text(dy$t[i], f(dy$t[i]), labels = round(dy$y[i], 2), pos = 3, col = col, 
+  #      xpd = NA)
+  # rect(xleft = 4.1, xright = 5.5, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  # rect(xleft = 5.8, xright = 6, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  # text(6, 5, "~ slope(y)", family = "mono", cex = 1.5, adj = c(1, NA))
+  ##############################################################################
+  # bottom left
+  col <- "#F58420"
+  par(fig = c(0, 0.5, 0, 0.5), mar = c(0, 0, 0, 0), oma = c(3, 3, 0.75, 0.25), new = TRUE)
+  integrate2 <- function(f, lower, upper) integrate(f, lower, upper)$value/(upper - lower)
+  int <- unlist(mapply(integrate2, list(f), list(min(t)), t, SIMPLIFY = FALSE), use.names = FALSE)
+  int[is.na(int)] <- 0
+  trp <- c(95, 5)
+  trp2 <- trp[1] - (int - min(int))/diff(range(int)) * abs(diff(trp))
+  plot(t, y, type = 'l', xlim = c(0, 6),
+       yaxt = "n", ylab = "", xaxt = "n", xlab = "")
+  axis(1, col.axis = NA,  at = seq(0, 6, 2))
+  axis(2, las = 1, col.axis = NA, at = seq(0, 6, 2))
+  # yy <- c(y[seq_along(t) <= i], rep(0, sum(seq_along(t) <= i)))
+  # xx <- c(t[seq_along(t) <= i], rev(t[seq_along(t) <= i]))
+  # polygon(xx, yy, col = col_f(col, trp2[i]), border = NA)
+  # lines(t[seq_along(t) <= i], y[seq_along(t) <= i])
+  # points(t[i], y[i], cex = 1.5, pch = 21, bg = col, col = col, xpd = NA)
+  # text(x = t[i], y = y[i], labels = round(int[i], 2), pos = 3, col = "white", 
+  #      xpd = NA, font = 2)
+  # text(x = t[i], y = y[i], labels = round(int[i], 2), pos = 3, col = col, xpd = NA)
+  # rect(xleft = 4.35, xright = 5.5, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  # rect(xleft = 5.8, xright = 6, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  # text(6, 5, "~ area(y)", family = "mono", cex = 1.5, adj = c(1, NA))
+  ##############################################################################
+  # bottom right
+  col <- "#203567"
+  par(fig = c(0.5, 1, 0, 0.5), mar = c(0, 0, 0, 0), oma = c(3, 3, 0.75, 0.25), new = TRUE)
+  tail <- seq(0, 1, 0.01)
+  ltail <- length(tail)
+  plot(t, y, type = 'l', xlim = c(0, 6), yaxt = "n", ylab = "", xaxt = "n", xlab = "")
+  axis(1, at = seq(0, 6, 2))
+  mtext("t", 1, line = 1.5)
+  # lines(t, sqrt(y), lwd = 2, col = col)
+  # points(t[i]-tail, sqrt(f(t[i]-tail)), cex = seq(1.5, 0.5, length.out = ltail), 
+  #        pch = 21, bg = col_f(col, seq(90, 100, length.out = ltail)), 
+  #        col = NA, xpd = NA)
+  # points(t[i], sqrt(y[i]), cex = 1.5, pch = 21, bg = col, col = NA, xpd = NA)
+  # text(x = t[i], y = sqrt(y[i]), labels = round(sqrt(y[i]), 2), pos = 3, col = "white", 
+  #      xpd = NA, font = 2)
+  # text(x = t[i], y = sqrt(y[i]), labels = round(sqrt(y[i]), 2), pos = 3, col = col, 
+  #      xpd = NA)
+  # rect(xleft = 2.45, xright = 3.85, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  # rect(xleft = 5.8, xright = 6, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  # text(6, 5, "~ vsqrt(value(y))", family = "mono", cex = 1.5, adj = c(1, NA))
+}
+
+```
+
+<table style="margin-right: 60px" align="center">
+  <tr>
+    <td>&nbsp;<img src="Figures/icons_link.png" width="65px"/></td>
+    <td>&nbsp;<font size=4 color="#515151"><a href="https://drizopoulos.github.io/JMbayes2/articles/Transformation_Functions.html"><b><u>Transformation Functions</a></u></b>  vignette.</font></td>
+  </tr>
+</table>
+
+## Functional Forms
+
+```{r ff2, fig.align = "center", animation.hook = "gifski", interval = 0.05, cache = TRUE, fig.width = 9, fig.height = 4.5}
+
+t <- seq(from = 0, to = 6, length.out = 200)
+f <- function(t) sin(t*pi/6 + pi/2) * 3 + 3
+y <- f(t)
+for(i in seq_along(t)) {
+  ##############################################################################
+  # top left
+  col <- "#F05863"
+  par(fig = c(0, 0.5, 0.5, 1), mar = c(0, 0, 0, 0), oma = c(3, 3, 0.75, 0.25))
+  tail <- seq(0, 1, 0.01)
+  ltail <- length(tail)
+  plot(t, y, type = 'l', xlim = c(0, 6),
+       yaxt = 'n', ylab = "", xaxt = "n", xlab = "")
+  axis(2, las = 1, at = seq(0, 6, 2))
+  mtext(expression(paste(eta[i], "(t)")), 2, las = 1, line = 1.5)
+  points(t[i]-tail, f(t[i]-tail), cex = seq(1.5, 0.5, length.out = ltail), 
+         pch = 21, bg = col_f(col, seq(90, 100, length.out = ltail)), 
+         col = NA, xpd = NA)
+  points(t[i], y[i], cex = 1.5, pch = 21, bg = col, col = NA, xpd = NA)
+  text(x = t[i], y = y[i], labels = round(y[i], 2), pos = 3, col = "white", 
+       xpd = NA, font = 2)
+  text(x = t[i], y = y[i], labels = round(y[i], 2), pos = 3, col = col, 
+       xpd = NA)
+  rect(xleft = 4.1, xright = 5.5, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  rect(xleft = 5.8, xright = 6, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  text(6, 5, "~ value(y)", family = "mono", cex = 1.5, adj = c(1, NA))
+  ##############################################################################
+  # top right
+  col <- "#D36EAB"
+  par(fig = c(0.5, 1, 0.5, 1), mar = c(0, 0, 0, 0), oma = c(3, 3, 0.75, 0.25), new = TRUE)
+  d <- function(y, t, digits = 3) {
+    dy <- round(diff(y)/diff(t), digits)
+    dt <- rowMeans(embed(t, 2))
+    data.frame(t = dt, y = dy)
+  }
+  dy <- d(y, t)
+  tail <- 1:20
+  ltail <- length(tail)
+  plot(t, y, type = 'l', xlim = c(0, 6),
+       yaxt = "n", ylab = "", xaxt = "n", xlab = "")
+  l <- 1.5
+  ang <- atan(dy$y[i])
+  delta_x <- cos(ang) * l
+  delta_y  <- sin(ang) * l
+  ii <- c(i - tail)[c(i - tail) > 0]
+  segments(x0 = dy$t[ii] - delta_x, y0 = f(dy$t[ii]) - delta_y, 
+           x1 = dy$t[ii] + delta_x, y1 = f(dy$t[ii]) + delta_y,
+           lwd = 2, col = col_f(col, seq(90, 100, length.out = ltail)), xpd = NA)
+  segments(x0 = dy$t[i] - delta_x, y0 = f(dy$t[i]) - delta_y, 
+           x1 = dy$t[i] + delta_x, y1 = f(dy$t[i]) + delta_y,
+           lwd = 2, col = col, xpd = NA)
+  points(dy$t[i], f(dy$t[i]), cex = 1.5, pch = 21, bg = col, col = col, xpd = NA)
+  text(dy$t[i], f(dy$t[i]), labels = round(dy$y[i], 2), pos = 3, col = "white", 
+       xpd = NA, font = 2)
+  text(dy$t[i], f(dy$t[i]), labels = round(dy$y[i], 2), pos = 3, col = col, 
+       xpd = NA)
+  rect(xleft = 4.1, xright = 5.5, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  rect(xleft = 5.8, xright = 6, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  text(6, 5, "~ slope(y)", family = "mono", cex = 1.5, adj = c(1, NA))
+  ##############################################################################
+  # bottom left
+  col <- "#F58420"
+  par(fig = c(0, 0.5, 0, 0.5), mar = c(0, 0, 0, 0), oma = c(3, 3, 0.75, 0.25), new = TRUE)
+  integrate2 <- function(f, lower, upper) integrate(f, lower, upper)$value/(upper - lower)
+  int <- unlist(mapply(integrate2, list(f), list(min(t)), t, SIMPLIFY = FALSE), use.names = FALSE)
+  int[is.na(int)] <- 0
+  trp <- c(95, 5)
+  trp2 <- trp[1] - (int - min(int))/diff(range(int)) * abs(diff(trp))
+  plot(t, y, type = 'l', xlim = c(0, 6),
+       yaxt = "n", ylab = "", xaxt = "n", xlab = "")
+  axis(1, col.axis = NA,  at = seq(0, 6, 2))
+  axis(2, las = 1, col.axis = NA, at = seq(0, 6, 2))
+  # yy <- c(y[seq_along(t) <= i], rep(0, sum(seq_along(t) <= i)))
+  # xx <- c(t[seq_along(t) <= i], rev(t[seq_along(t) <= i]))
+  # polygon(xx, yy, col = col_f(col, trp2[i]), border = NA)
+  # lines(t[seq_along(t) <= i], y[seq_along(t) <= i])
+  # points(t[i], y[i], cex = 1.5, pch = 21, bg = col, col = col, xpd = NA)
+  # text(x = t[i], y = y[i], labels = round(int[i], 2), pos = 3, col = "white", 
+  #      xpd = NA, font = 2)
+  # text(x = t[i], y = y[i], labels = round(int[i], 2), pos = 3, col = col, xpd = NA)
+  # rect(xleft = 4.35, xright = 5.5, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  # rect(xleft = 5.8, xright = 6, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  # text(6, 5, "~ area(y)", family = "mono", cex = 1.5, adj = c(1, NA))
+  ##############################################################################
+  # bottom right
+  col <- "#203567"
+  par(fig = c(0.5, 1, 0, 0.5), mar = c(0, 0, 0, 0), oma = c(3, 3, 0.75, 0.25), new = TRUE)
+  tail <- seq(0, 1, 0.01)
+  ltail <- length(tail)
+  plot(t, y, type = 'l', xlim = c(0, 6), yaxt = "n", ylab = "", xaxt = "n", xlab = "")
+  axis(1, at = seq(0, 6, 2))
+  mtext("t", 1, line = 1.5)
+  # lines(t, sqrt(y), lwd = 2, col = col)
+  # points(t[i]-tail, sqrt(f(t[i]-tail)), cex = seq(1.5, 0.5, length.out = ltail), 
+  #        pch = 21, bg = col_f(col, seq(90, 100, length.out = ltail)), 
+  #        col = NA, xpd = NA)
+  # points(t[i], sqrt(y[i]), cex = 1.5, pch = 21, bg = col, col = NA, xpd = NA)
+  # text(x = t[i], y = sqrt(y[i]), labels = round(sqrt(y[i]), 2), pos = 3, col = "white", 
+  #      xpd = NA, font = 2)
+  # text(x = t[i], y = sqrt(y[i]), labels = round(sqrt(y[i]), 2), pos = 3, col = col, 
+  #      xpd = NA)
+  # rect(xleft = 2.45, xright = 3.85, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  # rect(xleft = 5.8, xright = 6, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  # text(6, 5, "~ vsqrt(value(y))", family = "mono", cex = 1.5, adj = c(1, NA))
+}
+
+```
+
+
+<table style="margin-right: 60px" align="center">
+  <tr>
+    <td>&nbsp;<img src="Figures/icons-link.png" width="65px"/></td>
+    <td>&nbsp;<font size=4 color="#515151"><a href="https://drizopoulos.github.io/JMbayes2/articles/Transformation_Functions.html"><b><u>Transformation Functions</a></u></b>  vignette.</font></td>
+  </tr>
+</table>
+
+## Functional Forms
+
+```{r ff3, fig.align = "center", animation.hook = "gifski", interval = 0.05, cache = TRUE, fig.width = 9, fig.height = 4.5}
+
+t <- seq(from = 0, to = 6, length.out = 200)
+f <- function(t) sin(t*pi/6 + pi/2) * 3 + 3
+y <- f(t)
+for(i in seq_along(t)) {
+  ##############################################################################
+  # top left
+  col <- "#F05863"
+  par(fig = c(0, 0.5, 0.5, 1), mar = c(0, 0, 0, 0), oma = c(3, 3, 0.75, 0.25))
+  tail <- seq(0, 1, 0.01)
+  ltail <- length(tail)
+  plot(t, y, type = 'l', xlim = c(0, 6),
+       yaxt = 'n', ylab = "", xaxt = "n", xlab = "")
+  axis(2, las = 1, at = seq(0, 6, 2))
+  mtext(expression(paste(eta[i], "(t)")), 2, las = 1, line = 1.5)
+  points(t[i]-tail, f(t[i]-tail), cex = seq(1.5, 0.5, length.out = ltail), 
+         pch = 21, bg = col_f(col, seq(90, 100, length.out = ltail)), 
+         col = NA, xpd = NA)
+  points(t[i], y[i], cex = 1.5, pch = 21, bg = col, col = NA, xpd = NA)
+  text(x = t[i], y = y[i], labels = round(y[i], 2), pos = 3, col = "white", 
+       xpd = NA, font = 2)
+  text(x = t[i], y = y[i], labels = round(y[i], 2), pos = 3, col = col, 
+       xpd = NA)
+  rect(xleft = 4.1, xright = 5.5, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  rect(xleft = 5.8, xright = 6, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  text(6, 5, "~ value(y)", family = "mono", cex = 1.5, adj = c(1, NA))
+  ##############################################################################
+  # top right
+  col <- "#D36EAB"
+  par(fig = c(0.5, 1, 0.5, 1), mar = c(0, 0, 0, 0), oma = c(3, 3, 0.75, 0.25), new = TRUE)
+  d <- function(y, t, digits = 3) {
+    dy <- round(diff(y)/diff(t), digits)
+    dt <- rowMeans(embed(t, 2))
+    data.frame(t = dt, y = dy)
+  }
+  dy <- d(y, t)
+  tail <- 1:20
+  ltail <- length(tail)
+  plot(t, y, type = 'l', xlim = c(0, 6),
+       yaxt = "n", ylab = "", xaxt = "n", xlab = "")
+  l <- 1.5
+  ang <- atan(dy$y[i])
+  delta_x <- cos(ang) * l
+  delta_y  <- sin(ang) * l
+  ii <- c(i - tail)[c(i - tail) > 0]
+  segments(x0 = dy$t[ii] - delta_x, y0 = f(dy$t[ii]) - delta_y, 
+           x1 = dy$t[ii] + delta_x, y1 = f(dy$t[ii]) + delta_y,
+           lwd = 2, col = col_f(col, seq(90, 100, length.out = ltail)), xpd = NA)
+  segments(x0 = dy$t[i] - delta_x, y0 = f(dy$t[i]) - delta_y, 
+           x1 = dy$t[i] + delta_x, y1 = f(dy$t[i]) + delta_y,
+           lwd = 2, col = col, xpd = NA)
+  points(dy$t[i], f(dy$t[i]), cex = 1.5, pch = 21, bg = col, col = col, xpd = NA)
+  text(dy$t[i], f(dy$t[i]), labels = round(dy$y[i], 2), pos = 3, col = "white", 
+       xpd = NA, font = 2)
+  text(dy$t[i], f(dy$t[i]), labels = round(dy$y[i], 2), pos = 3, col = col, 
+       xpd = NA)
+  rect(xleft = 4.1, xright = 5.5, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  rect(xleft = 5.8, xright = 6, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  text(6, 5, "~ slope(y)", family = "mono", cex = 1.5, adj = c(1, NA))
+  ##############################################################################
+  # bottom left
+  col <- "#F58420"
+  par(fig = c(0, 0.5, 0, 0.5), mar = c(0, 0, 0, 0), oma = c(3, 3, 0.75, 0.25), new = TRUE)
+  integrate2 <- function(f, lower, upper) integrate(f, lower, upper)$value/(upper - lower)
+  int <- unlist(mapply(integrate2, list(f), list(min(t)), t, SIMPLIFY = FALSE), use.names = FALSE)
+  int[is.na(int)] <- 0
+  trp <- c(95, 5)
+  trp2 <- trp[1] - (int - min(int))/diff(range(int)) * abs(diff(trp))
+  plot(t, y, type = 'l', xlim = c(0, 6),
+       yaxt = "n", ylab = "", xaxt = "n", xlab = "")
+  axis(1, col.axis = NA,  at = seq(0, 6, 2))
+  axis(2, las = 1, col.axis = NA, at = seq(0, 6, 2))
+  yy <- c(y[seq_along(t) <= i], rep(0, sum(seq_along(t) <= i)))
+  xx <- c(t[seq_along(t) <= i], rev(t[seq_along(t) <= i]))
+  polygon(xx, yy, col = col_f(col, trp2[i]), border = NA)
+  lines(t[seq_along(t) <= i], y[seq_along(t) <= i])
+  points(t[i], y[i], cex = 1.5, pch = 21, bg = col, col = col, xpd = NA)
+  text(x = t[i], y = y[i], labels = round(int[i], 2), pos = 3, col = "white", 
+       xpd = NA, font = 2)
+  text(x = t[i], y = y[i], labels = round(int[i], 2), pos = 3, col = col, xpd = NA)
+  rect(xleft = 4.35, xright = 5.5, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  rect(xleft = 5.8, xright = 6, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  text(6, 5, "~ area(y)", family = "mono", cex = 1.5, adj = c(1, NA))
+  ##############################################################################
+  # bottom right
+  col <- "#203567"
+  par(fig = c(0.5, 1, 0, 0.5), mar = c(0, 0, 0, 0), oma = c(3, 3, 0.75, 0.25), new = TRUE)
+  tail <- seq(0, 1, 0.01)
+  ltail <- length(tail)
+  plot(t, y, type = 'l', xlim = c(0, 6), yaxt = "n", ylab = "", xaxt = "n", xlab = "")
+  axis(1, at = seq(0, 6, 2))
+  mtext("t", 1, line = 1.5)
+  # lines(t, sqrt(y), lwd = 2, col = col)
+  # points(t[i]-tail, sqrt(f(t[i]-tail)), cex = seq(1.5, 0.5, length.out = ltail), 
+  #        pch = 21, bg = col_f(col, seq(90, 100, length.out = ltail)), 
+  #        col = NA, xpd = NA)
+  # points(t[i], sqrt(y[i]), cex = 1.5, pch = 21, bg = col, col = NA, xpd = NA)
+  # text(x = t[i], y = sqrt(y[i]), labels = round(sqrt(y[i]), 2), pos = 3, col = "white", 
+  #      xpd = NA, font = 2)
+  # text(x = t[i], y = sqrt(y[i]), labels = round(sqrt(y[i]), 2), pos = 3, col = col, 
+  #      xpd = NA)
+  # rect(xleft = 2.45, xright = 3.85, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  # rect(xleft = 5.8, xright = 6, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  # text(6, 5, "~ vsqrt(value(y))", family = "mono", cex = 1.5, adj = c(1, NA))
+}
+
+```
+
+<table style="margin-right: 60px" align="center">
+  <tr>
+    <td>&nbsp;<img src="Figures/icons-link.png" width="65px"/></td>
+    <td>&nbsp;<font size=4 color="#515151"><a href="https://drizopoulos.github.io/JMbayes2/articles/Transformation_Functions.html"><b>Transformation Functions</a></b>  vignette.</font></td>
+  </tr>
+</table>
+
+## Functional Forms
+
+```{r ff4, fig.align = "center", animation.hook = "gifski", interval = 0.05, cache = TRUE, fig.width = 9, fig.height = 4.5}
+
+t <- seq(from = 0, to = 6, length.out = 200)
+f <- function(t) sin(t*pi/6 + pi/2) * 3 + 3
+y <- f(t)
+for(i in seq_along(t)) {
+  ##############################################################################
+  # top left
+  col <- "#F05863"
+  par(fig = c(0, 0.5, 0.5, 1), mar = c(0, 0, 0, 0), oma = c(3, 3, 0.75, 0.25))
+  tail <- seq(0, 1, 0.01)
+  ltail <- length(tail)
+  plot(t, y, type = 'l', xlim = c(0, 6),
+       yaxt = 'n', ylab = "", xaxt = "n", xlab = "")
+  axis(2, las = 1, at = seq(0, 6, 2))
+  mtext(expression(paste(eta[i], "(t)")), 2, las = 1, line = 1.5)
+  points(t[i]-tail, f(t[i]-tail), cex = seq(1.5, 0.5, length.out = ltail), 
+         pch = 21, bg = col_f(col, seq(90, 100, length.out = ltail)), 
+         col = NA, xpd = NA)
+  points(t[i], y[i], cex = 1.5, pch = 21, bg = col, col = NA, xpd = NA)
+  text(x = t[i], y = y[i], labels = round(y[i], 2), pos = 3, col = "white", 
+       xpd = NA, font = 2)
+  text(x = t[i], y = y[i], labels = round(y[i], 2), pos = 3, col = col, 
+       xpd = NA)
+  rect(xleft = 4.1, xright = 5.5, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  rect(xleft = 5.8, xright = 6, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  text(6, 5, "~ value(y)", family = "mono", cex = 1.5, adj = c(1, NA))
+  ##############################################################################
+  # top right
+  col <- "#D36EAB"
+  par(fig = c(0.5, 1, 0.5, 1), mar = c(0, 0, 0, 0), oma = c(3, 3, 0.75, 0.25), new = TRUE)
+  d <- function(y, t, digits = 3) {
+    dy <- round(diff(y)/diff(t), digits)
+    dt <- rowMeans(embed(t, 2))
+    data.frame(t = dt, y = dy)
+  }
+  dy <- d(y, t)
+  tail <- 1:20
+  ltail <- length(tail)
+  plot(t, y, type = 'l', xlim = c(0, 6),
+       yaxt = "n", ylab = "", xaxt = "n", xlab = "")
+  l <- 1.5
+  ang <- atan(dy$y[i])
+  delta_x <- cos(ang) * l
+  delta_y  <- sin(ang) * l
+  ii <- c(i - tail)[c(i - tail) > 0]
+  segments(x0 = dy$t[ii] - delta_x, y0 = f(dy$t[ii]) - delta_y, 
+           x1 = dy$t[ii] + delta_x, y1 = f(dy$t[ii]) + delta_y,
+           lwd = 2, col = col_f(col, seq(90, 100, length.out = ltail)), xpd = NA)
+  segments(x0 = dy$t[i] - delta_x, y0 = f(dy$t[i]) - delta_y, 
+           x1 = dy$t[i] + delta_x, y1 = f(dy$t[i]) + delta_y,
+           lwd = 2, col = col, xpd = NA)
+  points(dy$t[i], f(dy$t[i]), cex = 1.5, pch = 21, bg = col, col = col, xpd = NA)
+  text(dy$t[i], f(dy$t[i]), labels = round(dy$y[i], 2), pos = 3, col = "white", 
+       xpd = NA, font = 2)
+  text(dy$t[i], f(dy$t[i]), labels = round(dy$y[i], 2), pos = 3, col = col, 
+       xpd = NA)
+  rect(xleft = 4.1, xright = 5.5, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  rect(xleft = 5.8, xright = 6, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  text(6, 5, "~ slope(y)", family = "mono", cex = 1.5, adj = c(1, NA))
+  ##############################################################################
+  # bottom left
+  col <- "#F58420"
+  par(fig = c(0, 0.5, 0, 0.5), mar = c(0, 0, 0, 0), oma = c(3, 3, 0.75, 0.25), new = TRUE)
+  integrate2 <- function(f, lower, upper) integrate(f, lower, upper)$value/(upper - lower)
+  int <- unlist(mapply(integrate2, list(f), list(min(t)), t, SIMPLIFY = FALSE), use.names = FALSE)
+  int[is.na(int)] <- 0
+  trp <- c(95, 5)
+  trp2 <- trp[1] - (int - min(int))/diff(range(int)) * abs(diff(trp))
+  plot(t, y, type = 'l', xlim = c(0, 6),
+       yaxt = "n", ylab = "", xaxt = "n", xlab = "")
+  axis(1, col.axis = NA,  at = seq(0, 6, 2))
+  axis(2, las = 1, col.axis = NA, at = seq(0, 6, 2))
+  yy <- c(y[seq_along(t) <= i], rep(0, sum(seq_along(t) <= i)))
+  xx <- c(t[seq_along(t) <= i], rev(t[seq_along(t) <= i]))
+  polygon(xx, yy, col = col_f(col, trp2[i]), border = NA)
+  lines(t[seq_along(t) <= i], y[seq_along(t) <= i])
+  points(t[i], y[i], cex = 1.5, pch = 21, bg = col, col = col, xpd = NA)
+  text(x = t[i], y = y[i], labels = round(int[i], 2), pos = 3, col = "white", 
+       xpd = NA, font = 2)
+  text(x = t[i], y = y[i], labels = round(int[i], 2), pos = 3, col = col, xpd = NA)
+  rect(xleft = 4.35, xright = 5.5, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  rect(xleft = 5.8, xright = 6, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  text(6, 5, "~ area(y)", family = "mono", cex = 1.5, adj = c(1, NA))
+  ##############################################################################
+  # bottom right
+  col <- "#203567"
+  par(fig = c(0.5, 1, 0, 0.5), mar = c(0, 0, 0, 0), oma = c(3, 3, 0.75, 0.25), new = TRUE)
+  tail <- seq(0, 1, 0.01)
+  ltail <- length(tail)
+  plot(t, y, type = 'l', xlim = c(0, 6), yaxt = "n", ylab = "", xaxt = "n", xlab = "")
+  axis(1, at = seq(0, 6, 2))
+  mtext("t", 1, line = 1.5)
+  lines(t, sqrt(y), lwd = 2, col = col)
+  points(t[i]-tail, sqrt(f(t[i]-tail)), cex = seq(1.5, 0.5, length.out = ltail), 
+         pch = 21, bg = col_f(col, seq(90, 100, length.out = ltail)), 
+         col = NA, xpd = NA)
+  points(t[i], sqrt(y[i]), cex = 1.5, pch = 21, bg = col, col = NA, xpd = NA)
+  text(x = t[i], y = sqrt(y[i]), labels = round(sqrt(y[i]), 2), pos = 3, col = "white", 
+       xpd = NA, font = 2)
+  text(x = t[i], y = sqrt(y[i]), labels = round(sqrt(y[i]), 2), pos = 3, col = col, 
+       xpd = NA)
+  rect(xleft = 2.45, xright = 3.85, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  rect(xleft = 5.8, xright = 6, ybottom = 4.5, ytop = 5.5, col = col_f(col, 50), border = NA)
+  text(6, 5, "~ vsqrt(value(y))", family = "mono", cex = 1.5, adj = c(1, NA))
+}
+
+```
+
+<table style="margin-right: 60px" align="center">
+  <tr>
+    <td>&nbsp;<img src="Figures/icons-link.png" width="65px"/></td>
+    <td>&nbsp;<font size=4 color="#515151"><a href="https://drizopoulos.github.io/JMbayes2/articles/Transformation_Functions.html"><b>Transformation Functions</a></b>  vignette.</font></td>
+  </tr>
+</table>
+
+## Multiple Biomarkers
+
+$$\require{color}\DeclareMathOperator{\logit}{logit}
+\begin{cases}
+y_{\colorbox{#F5842070}{$k_i$}}(t)=  \mathcal{g}^{-1}_k\left\{\eta_{k_i}(t)\right\} \\
+\\
+h_i(t)= h_0(t)\exp\left\{w_i(t)^\top \gamma + \colorbox{#F5842070}{$\sum_{k=1}^{p}$}\mathcal{f}_k\left\{\eta_{k_i}(t)\right\} \alpha_k \right\} \\
+\end{cases},
+$$
+
+<br>
+
+$$
+\mathbf b \sim \mathcal{N} \left(\boldsymbol 0, \mathbf D \right), \qquad i=1,\dots,n \text{ individuals}, \qquad \colorbox{#F5842070}{$k=1,\dots,p \text{ biomarkers.}$}
+$$
+<br>
+
+<pre>
+<code>
+library(<mark class="c4">JMbayes2</mark>)<br>
+long_fit  <- lme(y ~ time + group, long_data, ~ time | id)<br>
+ter_fit   <- coxph(Surv(tstop, status) ~ group, ter_data)<br>
+<br>
+<br>
+</code>
+</pre>
+
+```{r example2a, cache = TRUE, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE}
+
+library("JMbayes2")
+long_fit  <- lme(log(serBilir) ~ year + sex, pbc2, ~ year | id)
+long_fit2 <- mixed_model(ascites ~ year + sex, ~ year | id, pbc2, binomial())
+ter_fit   <- coxph(Surv(years, status2) ~ sex, pbc2.id)
+jm_fit2   <- jm(ter_fit, list(long_fit, long_fit2), 'year')
+
+```
+
+## Multiple Biomarkers
+
+$$\require{color}\DeclareMathOperator{\logit}{logit}
+\begin{cases}
+y_{\colorbox{#FFFFFF}{$k_i$}}(t)=  \mathcal{g}^{-1}_k\left\{\eta_{k_i}(t)\right\} \\
+\\
+h_i(t)= h_0(t)\exp\left\{w_i(t)^\top \gamma + \colorbox{#FFFFFF}{$\sum_{k=1}^{p}$}\mathcal{f}_k\left\{\eta_{k_i}(t)\right\} \alpha_k \right\} \\
+\end{cases},
+$$
+
+<br>
+
+$$
+\mathbf b \sim \mathcal{N} \left(\boldsymbol 0, \mathbf D \right), \qquad i=1,\dots,n \text{ individuals}, \qquad \colorbox{#FFFFFF}{$k=1,\dots,p \text{ biomarkers.}$}
+$$
+<br>
+
+<pre>
+<code>
+library(<mark class="c4">JMbayes2</mark>)<br>
+long_fit  <- lme(y ~ time + group, long_data, ~ time | id)<br>
+ter_fit   <- coxph(Surv(tstop, status) ~ group, ter_data)<br>
+<mark class="hc2">long_fit2 <- mixed_model(y2 ~ time, ~ time | id, long_data,</mark> <mark class="hc1">binomial()</mark> <mark class="hc2">)</mark><br>
+<br>
+</code>
+</pre>
+
+## Multiple Biomarkers
+
+$$\require{color}\DeclareMathOperator{\logit}{logit}
+\begin{cases}
+y_{\colorbox{#FFFFFF}{$k_i$}}(t)=  \mathcal{g}^{-1}_k\left\{\eta_{k_i}(t)\right\} \\
+\\
+h_i(t)= h_0(t)\exp\left\{w_i(t)^\top \gamma + \colorbox{#FFFFFF}{$\sum_{k=1}^{p}$}\mathcal{f}_k\left\{\eta_{k_i}(t)\right\} \alpha_k \right\} \\
+\end{cases},
+$$
+
+<br>
+
+$$
+\mathbf b \sim \mathcal{N} \left(\boldsymbol 0, \mathbf D \right), \qquad i=1,\dots,n \text{ individuals}, \qquad \colorbox{#FFFFFF}{$k=1,\dots,p \text{ biomarkers.}$}
+$$
+<br>
+
+<pre>
+<code>
+library(<mark class="c4">JMbayes2</mark>)<br>
+long_fit  <- lme(y ~ time + group, long_data, ~ time | id)<br>
+ter_fit   <- coxph(Surv(tstop, status) ~ group, ter_data)<br>
+<mark class="hc2">long_fit2 <- mixed_model(y2 ~ time, ~ time | id, long_data,</mark> <mark class="hc1">binomial()</mark> <mark class="hc2">)</mark><br>
+jm_fit    <- jm(ter_fit, <mark class="hc3">list(long_fit, long_fit2)</mark>, 'time')<br>
+</code>
+</pre>
+
+
+## Multiple Biomarkers
+
+Various distributions:
+
+<div style="float: left; width: 49%;">
+- Normal & censored Normal;
+
+- Student’s-t;
+
+- Beta;
+</div>
+
+<div style="float: right; width: 49%;">
+- Gamma;
+
+- Binomial, Beta-Binomial;
+
+- Poisson, Negative Binomial.
+</div>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
+<table style="margin-right: 60px" align="center">
+  <tr>
+    <td>&nbsp;<img src="Figures/icons-link.png" width="65px"/></td>
+    <td>&nbsp;<font size=4 color="#515151"><a href="https://drizopoulos.github.io/JMbayes2/articles/JMbayes2.html"><b><u>Univariate and Multivariate Joint Models</a></u></b> and <a href="https://drizopoulos.github.io/JMbayes2/articles/Non_Gaussian_Mixed_Models.html"><b><u>Non Gaussian Mixed Models</a></u></b> vignettes.</font></td>
+</table>
+
+## Multiple Failure Times
+
+$$\require{color}
+\begin{cases}
+y_{k_i}(t)= \mathcal{g}\left\{\eta^{-1}_{k_i}(t)\right\} \\
+\\
+h_{\colorbox{#D36EAB70}{$j_i$}}(t)= \,h_{\colorbox{#D36EAB70}{$j_0$}}(t)\exp\left\{  w_{j_i}(t)^\top \gamma_j \,+ \sum_{k=1}^{p}\mathcal{f}_{jk}\left\{\eta_{k_i}(t)\right\} \alpha_{jk} \,\colorbox{#F5842070}{$\left(+\,\upsilon_{j_i}\right)$} \right\} \\
+\end{cases}
+$$
+<br>
+
+$$
+\small \begin{pmatrix} \mathbf b \\ \colorbox{#F5842070}{$\upsilon_i$}\end{pmatrix} \sim \mathcal{N} \left(\mathbf 0, \begin{pmatrix} \mathbf D & 0 \\ & \sigma^2_F \\ \end{pmatrix}\right),
+$$
+
+<br>
+
+$$
+\quad i=1,\dots,n \text{ individuals}, \qquad k=1,\dots,p \text{ biomarkers}, \qquad \colorbox{#D36EAB70}{$j=1,\dots,m \text{ events.}$}
+$$
+<br><br><br>
+
+<table style="margin-right: 60px" align="center">
+  <tr>
+    <td>&nbsp;<img src="Figures/icons-link.png" width="65px"/></td>
+    <td>&nbsp;<font size=4 color="#515151"><a href="https://drizopoulos.github.io/JMbayes2/articles/Competing_Risks.html"><b><u>Competing Risks</a></u></b> and <a href="https://drizopoulos.github.io/JMbayes2/articles/Multi_State_Processes.html"><b><u>Multi-state Processes</a></u></b> vignettes.</font></td>
+</table>
+
+## Recurrent Events
+
+$$\require{color}
+\begin{cases}
+y_{k_i}(t)= \mathcal{g}\left\{\eta^{-1}_{k_i}(t)\right\} \\
+\\
+h_{T_i}(t)= \,h_{T_0}(t)\exp\left\{  w_{T_i}(t)^\top \gamma_T \,+ \sum_{k=1}^{p}\mathcal{f}_k\left\{\eta_{k_i}(t)\right\} \alpha_{T_k} \,+ \colorbox{#F5842070}{$\upsilon_i$} \alpha_{F} \right\} & \text{Terminal}\\
+\\
+\colorbox{#EBEBEB}{$h_{R_i}(t)= h_{R_0}(t)\exp\left\{  w_{R_i}(t)^\top \gamma_R + \sum_{k=1}^{p}\mathcal{f}_k\left\{\eta_{k_i}(t)\right\} \alpha_{R_k} + \colorbox{#F5842070}{$\upsilon_i$} \right\}$} & \text{Recurrent}\\
+\end{cases}
+$$
+
+<br>
+
+$$
+\begin{pmatrix} \mathbf b \\ \colorbox{#F5842070}{$\upsilon_i$}\end{pmatrix} \sim \mathcal{N} \left(\mathbf 0, \begin{pmatrix} \mathbf D & 0 \\ & \sigma^2_F \\ \end{pmatrix}\right),$$
+
+<br>
+
+$$
+i=1,\dots,n \text{ individuals}, \qquad k=1,\dots,p \text{ biomarkers}.
+$$
+<br>
+
+## Recurrent Events
+
+```{r recurrent1a, dependson = c("functions"), fig.align = "center", cache = TRUE}
+
+col1 <- "#EA4E5C" # EMC dark blue
+col2 <- "#F08000" # pink
+col3 <- "#d6d6d6" # light grey
+col4 <- "#515151" # dark grey
+
+set.seed(2021)
+phi <- 0.3 # weibull scale
+sigma_t <- 0.8  # weibull shape
+s_i <- 3 # number of recurrent events
+dur <- runif(s_i, 0, 10) # duration of the events
+dur <- rep(0, s_i)
+
+# functions
+hzd <- function(t, sigma_t, phi, eta = 0) phi * sigma_t * t^(sigma_t-1)  * exp(eta) # hazard function
+
+semi_circle <- function(xc, yc, rx = NULL, ry = NULL, nstep = 1000, cex = 1, alpha0 = 0, alpha1 = 2*pi, ...) {
+  
+  crns <- par("usr") # corners of plot area (x1, x2, y1, y2) in the axis units
+  scale.x <- diff(crns[1:2])/par("pin")[1] # scale factor, to convert inches in the x-axis units
+  scale.y <- diff(crns[3:4])/par("pin")[2] # scale factor, to convert inches in the y-axis units
+  
+  xc.in <- xc / scale.x
+  yc.in <- yc / scale.y
+  
+  if(is.null(rx)) r.in  <- ry / scale.y
+  if(is.null(ry)) r.in  <- rx / scale.x
+  
+  as <- seq(alpha0, alpha1, len = nstep)
+  x <- xc.in + cos(as) * r.in
+  y <- yc.in + sin(as) * r.in
+  
+  lines(x*scale.x, y*scale.y, ...) 
+}
+
+# surival times
+ev_start <- sort(runif(s_i, 0, 200))
+ev_stop <- ev_start + dur 
+
+t <- seq(1, 200, length.out = 10000)
+
+# calendar
+h1 <- hzd(t, sigma_t = sigma_t, phi = phi)
+h2 <- hzd(t, sigma_t = sigma_t, phi = phi, eta = 0.25)
+
+bol <- mapply(function(start, stop) t >= start & t <= stop, ev_start, ev_stop)
+bol <- apply(bol, 1, any)
+h1[bol] <- 0
+h2[bol] <- 0
+
+par(fig = c(0, 1, 0.5, 1-0.1))
+par(mar = c(0, 0, 0, 0), oma = c(0, 1.5, 0.15, 0.25))
+plot(0, type = "n", ylim = c(0, max(h1, h2)), xlim = c(0, 200), 
+     ylab = "", xaxt = 'n', yaxt = 'n', yaxs = "i")
+axis(2, labels = FALSE, tck = -0.03)
+mtext("Hazard", 2, 0.75)
+axis(3, at = ev_start, labels = seq_along(ev_start), tck = -0.03,
+     mgp = c(3, .5, 0))
+
+par_usr <- par("usr")
+for(i in seq_len(s_i)){
+  rect(ev_start[i], par_usr[3], ev_stop[i], par_usr[4], 
+       col = col_f(col3, 50), border = NA)
+}
+abline(v = ev_start, lty = 1, lwd = 0.5)
+lines(t, h1, lwd = 2, col = col1)
+mtext("CALENDAR", 3, -2, font = 1, col = col1)
+
+# gap
+par(fig = c(0, 1, 0.1, 0.5), new = TRUE)
+par(mar = c(0, 0, 0, 0), oma = c(0, 1.5, 0.15, 0.25))
+plot(0, type = "n", ylim = c(0, max(h1, h2)), xlim = c(0, 200), 
+     ylab = "", xaxt = 'n', yaxt = 'n', yaxs = "i")
+mtext("GAP", 3, -2, font = 1, col = col2)
+axis(1, labels = FALSE, tck = -0.03)
+mtext("Time", 1, 0.75)
+axis(2, labels = FALSE, tck = -0.03)
+mtext("Hazard", 2, 0.75)
+
+h1 <- hzd(t, sigma_t = sigma_t, phi = phi)
+h2 <- hzd(t, sigma_t = sigma_t, phi = phi, eta = 0.25)
+
+risk_start <- c(0, ev_stop)
+risk_stop  <- c(ev_start, 200)
+
+bol <- mapply(function(start, stop) t >= start & t <= stop, risk_start, risk_stop)
+h1  <- apply(bol, 2, function(col) {
+  res <- numeric(length(col))
+  res[col] <- h1[seq_len(sum(col))]
+  res
+})
+h1 <- rowSums(h1)
+
+h2 <- apply(bol, 2, function(col) {
+  res <- numeric(length(col))
+  res[col] <- h2[seq_len(sum(col))]
+  res
+})
+h2 <- rowSums(h2)
+
+par_usr <- par("usr")
+for(i in seq_len(s_i)){
+  rect(ev_start[i], par_usr[3], ev_stop[i], par_usr[4], 
+       col = col_f(col3, 50), border = NA)
+}
+abline(v = ev_start, lty = 1, lwd = 0.5)
+lines(t, h1, lwd = 2, col = col2)
+
+################################################################################
+# legend
+# par(fig = c(0, 1, 0, 1), mar = c(0, 0, 0, 0), oma = c(0, 1.5, 0.15, 0.25))
+# xc <- 144
+# yc <- 0.285
+# rx <- 10
+# semi_circle(xc = xc + 7.5, yc = yc, rx = 7.5, nstep = 500, 
+#             cex = 1, alpha0 = pi, alpha1 = pi/2, col = "#45484A", xpd = NA, lwd = 1)
+# 
+# text(x = xc + 9, y = yc + 0.017, adj = c(0, NA), cex = 1, col = "#45484A",
+#      labels = "Non-risk period", xpd = NA)
+# 
+# points(x = xc, y = yc,
+#        col = "#45484A", bg = "#45484A",
+#        pch = 25, cex = 0.75)
+
+
+```
+
+## Recurrent Events
+
+```{r recurrent1b, dependson = c("functions"), fig.align = "center", cache = TRUE}
+
+col1 <- "#EA4E5C" # EMC dark blue
+col2 <- "#F08000" # pink
+col3 <- "#d6d6d6" # light grey
+col4 <- "#515151" # dark grey
+
+set.seed(2021)
+phi <- 0.3 # weibull scale
+sigma_t <- 0.8  # weibull shape
+s_i <- 3 # number of recurrent events
+dur <- runif(s_i, 0, 10) # duration of the events
+#dur <- rep(0, s_i)
+
+# functions
+hzd <- function(t, sigma_t, phi, eta = 0) phi * sigma_t * t^(sigma_t-1)  * exp(eta) # hazard function
+
+semi_circle <- function(xc, yc, rx = NULL, ry = NULL, nstep = 1000, cex = 1, alpha0 = 0, alpha1 = 2*pi, ...) {
+  
+  crns <- par("usr") # corners of plot area (x1, x2, y1, y2) in the axis units
+  scale.x <- diff(crns[1:2])/par("pin")[1] # scale factor, to convert inches in the x-axis units
+  scale.y <- diff(crns[3:4])/par("pin")[2] # scale factor, to convert inches in the y-axis units
+  
+  xc.in <- xc / scale.x
+  yc.in <- yc / scale.y
+  
+  if(is.null(rx)) r.in  <- ry / scale.y
+  if(is.null(ry)) r.in  <- rx / scale.x
+  
+  as <- seq(alpha0, alpha1, len = nstep)
+  x <- xc.in + cos(as) * r.in
+  y <- yc.in + sin(as) * r.in
+  
+  lines(x*scale.x, y*scale.y, ...) 
+}
+
+# surival times
+ev_start <- sort(runif(s_i, 0, 200))
+ev_stop <- ev_start + dur 
+
+t <- seq(1, 200, length.out = 10000)
+
+# calendar
+h1 <- hzd(t, sigma_t = sigma_t, phi = phi)
+h2 <- hzd(t, sigma_t = sigma_t, phi = phi, eta = 0.25)
+
+bol <- mapply(function(start, stop) t >= start & t <= stop, ev_start, ev_stop)
+bol <- apply(bol, 1, any)
+h1[bol] <- 0
+h2[bol] <- 0
+
+par(fig = c(0, 1, 0.5, 1-0.1))
+par(mar = c(0, 0, 0, 0), oma = c(0, 1.5, 0.15, 0.25))
+plot(0, type = "n", ylim = c(0, max(h1, h2)), xlim = c(0, 200), 
+     ylab = "", xaxt = 'n', yaxt = 'n', yaxs = "i")
+axis(2, labels = FALSE, tck = -0.03)
+mtext("Hazard", 2, 0.75)
+axis(3, at = ev_start, labels = seq_along(ev_start), tck = -0.03,
+     mgp = c(3, .5, 0))
+
+par_usr <- par("usr")
+for(i in seq_len(s_i)){
+  rect(ev_start[i], par_usr[3], ev_stop[i], par_usr[4], 
+       col = col_f(col3, 50), border = NA)
+}
+abline(v = ev_start, lty = 1, lwd = 0.5)
+lines(t, h1, lwd = 2, col = col1)
+mtext("CALENDAR", 3, -2, font = 1, col = col1)
+
+# gap
+par(fig = c(0, 1, 0.1, 0.5), new = TRUE)
+par(mar = c(0, 0, 0, 0), oma = c(0, 1.5, 0.15, 0.25))
+plot(0, type = "n", ylim = c(0, max(h1, h2)), xlim = c(0, 200), 
+     ylab = "", xaxt = 'n', yaxt = 'n', yaxs = "i")
+mtext("GAP", 3, -2, font = 1, col = col2)
+axis(1, labels = FALSE, tck = -0.03)
+mtext("Time", 1, 0.75)
+axis(2, labels = FALSE, tck = -0.03)
+mtext("Hazard", 2, 0.75)
+
+h1 <- hzd(t, sigma_t = sigma_t, phi = phi)
+h2 <- hzd(t, sigma_t = sigma_t, phi = phi, eta = 0.25)
+
+risk_start <- c(0, ev_stop)
+risk_stop  <- c(ev_start, 200)
+
+bol <- mapply(function(start, stop) t >= start & t <= stop, risk_start, risk_stop)
+h1  <- apply(bol, 2, function(col) {
+  res <- numeric(length(col))
+  res[col] <- h1[seq_len(sum(col))]
+  res
+})
+h1 <- rowSums(h1)
+
+h2 <- apply(bol, 2, function(col) {
+  res <- numeric(length(col))
+  res[col] <- h2[seq_len(sum(col))]
+  res
+})
+h2 <- rowSums(h2)
+
+par_usr <- par("usr")
+for(i in seq_len(s_i)){
+  rect(ev_start[i], par_usr[3], ev_stop[i], par_usr[4], 
+       col = col_f(col3, 50), border = NA)
+}
+abline(v = ev_start, lty = 1, lwd = 0.5)
+lines(t, h1, lwd = 2, col = col2)
+
+################################################################################
+# legend
+par(fig = c(0, 1, 0, 1), mar = c(0, 0, 0, 0), oma = c(0, 1.5, 0.15, 0.25))
+xc <- 144
+yc <- 0.285
+rx <- 10
+semi_circle(xc = xc + 7.5, yc = yc, rx = 7.5, nstep = 500, 
+            cex = 1, alpha0 = pi, alpha1 = pi/2, col = "#45484A", xpd = NA, lwd = 1)
+
+text(x = xc + 9, y = yc + 0.017, adj = c(0, NA), cex = 1, col = "#45484A",
+     labels = "Non-risk period", xpd = NA)
+
+points(x = xc, y = yc,
+       col = "#45484A", bg = "#45484A",
+       pch = 25, cex = 0.75)
+
+
+```
+
+## Recurrent Events
+
+```{r, fig.align = "center", fig.height = 1.5}
+
+dt <- data.frame(id = rep(1, 4), 
+                 tstart = c(0, 3, 5, 0), 
+                 tstop = c(2, 4, 7, 7), 
+                 status = c(1, 1, 0, 1),
+                 strata = c("rec", "rec", "rec", "ter"))
+
+xlim <- c(0, 7)
+ylim <- c(0, 1)
+par(oma = c(0, 0, 0, 0), mar = c(2.5, 0, 0, 0))
+plot(NA, type = "n", xlim = xlim, ylim = ylim, 
+     ylab = "", xlab = "", xaxt = "n", yaxt = "n", 
+     yaxs = "i", bty = "n")
+axis(1, at = c(0, 2, 3, 4, 5, 7), 
+     tcl = -.35, mgp = c(3, .5, 0),
+     col.axis = '#515151', col.ticks = '#515151', col = "#d6d6d6")
+mtext("Time", side = 1, line = 1.5, col = '#515151')
+
+cols <- c("#EA4E5C", "#F08000", "#D76CA7")
+segments(x0 = dt$tstart[dt$strata == "rec"], x1 = dt$tstop[dt$strata == "rec"],
+         y0 = 0.5, y1 = 0.5, col = cols, lwd = 6, lend = 'butt')
+rect_hgt <- 0.1
+rect(xleft = head(dt$tstop[dt$strata == "rec"], -1), xright = tail(dt$tstart[dt$strata == "rec"], -1), 
+     ybottom = 0.5 - rect_hgt, ytop = 0.5 + rect_hgt, lwd = 1)
+rect(xleft = dt$tstop[dt$strata == "ter"], xright = dt$tstop[dt$strata == "ter"], 
+     ybottom = 0.5 - rect_hgt, ytop = 0.5 + rect_hgt, lwd = 2)
+mid_points <- (head(dt$tstop[dt$strata == "rec"], -1) + 
+                 tail(dt$tstart[dt$strata == "rec"], -1))/2
+text(x = mid_points, y = 0.5 + rect_hgt, labels = "R", pos = 3)
+text(x = dt$tstop[dt$strata == "ter"], y = 0.5 + rect_hgt, pos = 3,
+     labels = c("C", "T")[dt$status[dt$strata == "ter"] + 1])
+
+```
+
+<center>
+<article>
+<pre><span style="font-size: 20px; line-height: normal;">
+ ##   id tstart tstop status strata
+  ## 1  1      <mark class="c1">0     2</mark>      1    rec 
+ ## 2  1      <mark class="c2">3     4</mark>      1    rec
+ ## 3  1      <mark class="c3">5     7</mark>      0    rec
+ ## 4  1      0     7      0    ter
+</span></pre>
+</article>
+</center>
+
+<br>
+<br>
+
+<pre>
+<code>
+surv <- rc_setup(rc_data, trm_data) <br>
+</code>
+</pre>
+
+## Recurrent Events
+
+<br>
+
+<br>
+
+<pre>
+<code>
+library(<mark class="c4">JMbayes2</mark>)<br>
+long_fit  <- lme(y ~ time, long, ~ time | id)<br>
+surv_fit  <- coxph(Surv(<mark class="hc1">tstart, tstop, status</mark>) ~ sex<mark class="hc2">:strata(process)</mark>, surv)<br>
+
+
+
+
+<br>
+</code>
+</pre>
+
+```{r recurrent4, cache = TRUE, echo = FALSE}
+gen_data <- function(){
+  n <- 500 # desired number of subjects 
+  n_i <- 15  # number of (planned) measurements per subject
+  tmax <- 7 # maximum follow-up time (type I censoring)
+  scale <- "gap" # hazard timescale
+  ##############################################################################
+  n_scl <- 1.5
+  n_target <- n
+  n <- n * n_scl
+  # longitudinal outcome 1/2
+  ## param true values
+  betas <- c("Intercept" = 6.94, "Time1" = 1.30, "Time2" = 1.84, "Time3" = 1.82)
+  sigma_y <- 0.6 # measurement error sd
+  D <- matrix(0, 4, 4)
+  D[lower.tri(D, TRUE)] <- c(0.71, 0.33, 0.07, 1.26, 2.68, 3.81, 4.35, 7.62, 5.4, 8)
+  D <- D + t(D)
+  diag(D) <- diag(D) * 0.5
+  b <- MASS::mvrnorm(n, rep(0, nrow(D)), D)
+  Bkn <- c(0, 7)
+  kn <- c(1, 3)
+  remove(D)
+  ##############################################################################
+  # terminal outcome
+  ## param true values
+  gammas_t <- c("(Intercept)" = -9, "Group" = 0.5, "Age" = 0.05) # phi = exp(Intercept)
+  sigma_t <- 2
+  alpha_t <- 0.5 # association biomarker
+  alphaF <- 0.25 # association frailty
+  sigmaF <- 0.25 # frailty SD
+  frailty <- rnorm(n, mean = 0, sd = sigmaF)
+  ## terminal data
+  group <- rep(0:1, each = n/2)
+  age <- runif(n, 30, 70)
+  W_t <- cbind("(Intercept)" = 1, "Group" = group, "Age" = age)
+  eta_t <- as.vector(W_t %*% gammas_t + alphaF * frailty) 
+  invS_t <- function(t, u, i) {
+    h <- function(s) { 
+      NS <- splines::ns(s, knots = kn, Boundary.knots = Bkn)
+      X <- cbind(1, NS)
+      Z <- cbind(1, NS)
+      eta_y <- as.vector(X %*% betas + rowSums(Z * b[rep(i, nrow(Z)), ]))
+      exp(log(sigma_t) + (sigma_t - 1) * log(s) + eta_t[i] + eta_y * alpha_t) 
+    }
+    integrate(h, lower = 0, upper = t)$value + log(u)
+  }
+  u_t <- runif(n)
+  ter_times <- numeric(n)
+  for(i in seq_len(n)) {
+    root <- try(uniroot(invS_t, interval = c(1e-05, 250), # arbitrary upper limit
+                        u = u_t[i], i = i)$root, TRUE)  
+    ter_times[i] <- if (!inherits(root, "try-error")) root else NA
+  }
+  ter_na <- !is.na(ter_times)
+  if(sum(ter_na) < n_target) stop("Not enough patients. Increase 'n_scl'.")
+  rmv_ids <- sample(which(ter_na), sum(ter_na) - n_target)
+  ter_na[rmv_ids] <- FALSE # remove the excess of subjects
+  ter <- data.frame(id    = seq_len(n)[ter_na],
+                    time  = ter_times[ter_na],
+                    group = group[ter_na],
+                    age   = age[ter_na])
+  frailty <- frailty[ter_na]
+  b <- b[ter_na, , drop = FALSE]
+  cens_times <- tmax
+  ter$status <- as.numeric(ter$time <= cens_times) # event indicator
+  ter$time <- pmin(ter$time, cens_times) # add censoring time
+  remove(gammas_t, sigma_t, group, W_t, eta_t, alpha_t, invS_t, u_t, i, root, 
+         n_target, rmv_ids, ter_times, cens_times, n, alphaF, age, ter_na,
+         sigmaF)
+  ##############################################################################
+  # recurring outcome
+  ## param true values
+  gammas_r <- c("(Intercept)" = -9+3, "Group" = 0.5, "Age" = 0.05) # phi = exp(Intercept)
+  sigma_r <- 2
+  alpha_r <- 0.5 # association biomarker
+  ## recurring data
+  W_r <- cbind("(Intercept)" = 1, "Group" = ter$group, "Age" = ter$age)
+  eta_r <- as.vector(W_r %*% gammas_r + frailty)
+  if(scale == "gap") {
+    invS_r <- function(t, u, i, tstart) {
+      h <- function(s) { 
+        NS <- splines::ns(s + tstart, knots = kn, Boundary.knots = Bkn)
+        X <- cbind(1, NS)
+        Z <- cbind(1, NS)
+        eta_y <- as.vector(X %*% betas + rowSums(Z * b[rep(i, nrow(Z)), ]))
+        exp(log(sigma_r) + (sigma_r - 1) * log(s) + eta_r[i] + eta_y * alpha_r) 
+      }
+      integrate(h, lower = 0, upper = t)$value + log(u)
+    }
+  } else if(scale == "calendar") {
+    invS_r <- function(t, u, i, tstart) {
+      h <- function(s) { 
+        NS <- splines::ns(s + tstart, knots = kn, Boundary.knots = Bkn)
+        X <- cbind(1, NS)
+        Z <- cbind(1, NS)
+        eta_y <- as.vector(X %*% betas + rowSums(Z * b[rep(i, nrow(Z)), ]))
+        exp(log(sigma_r) + (sigma_r - 1) * log(s + tstart) + eta_r[i] + eta_y * alpha_r) 
+      }
+      integrate(h, lower = 0, upper = t)$value + log(u)
+    }
+  }
+  stop_times <- start_times <- id_times <- list()
+  j <- 1
+  for(i in seq_along(ter$id)) {
+    tstart <- 0
+    while(!is.na(tstart) & tstart < ter$time[i]) {
+      u_r <- runif(1)
+      root <- try(uniroot(invS_r, interval = c(1e-05, 250), # arbitrary upper limit
+                          u = u_r, i = i, tstart = tstart)$root, TRUE)  
+      tstop <- if(!inherits(root, "try-error")) root else NA
+      start_times[[j]] <- tstart
+      stop_times[[j]] <- tstart + tstop
+      dur <- runif(1, 0, 0.1) # recurrent event duration
+      tstart <- tstart + tstop + dur
+      id_times[[j]] <- ter$id[i]
+      j <- j + 1
+    }
+  }
+  rec <- data.frame(id     = unlist(id_times),                       
+                    tstart = unlist(start_times),
+                    tstop  = unlist(stop_times))
+  rec$id  <- match(rec$id, unique(rec$id)) # rename IDs
+  rec$group <- ter$group[rec$id]
+  rec$age <- ter$age[rec$id]
+  rec$Stime <- ter$time[rec$id]
+  rec$status <- as.numeric(!is.na(rec$tstop) & rec$tstop < rec$Stime)  # event indicator
+  rec$tstop <- pmin(rec$tstop, rec$Stime, na.rm = TRUE) # add cens time
+  rec$Stime <- NULL
+  ter$id <- seq_along(ter$id)
+  remove(gammas_r, sigma_r, W_r, eta_r, alpha_r, invS_r, stop_times, start_times, 
+         id_times, dur, j, i, tstart, u_r, root, tstop)
+  ##############################################################################
+  # longitudinal outcome 2/2
+  long <- data.frame(id   = rep(ter$id, each = n_i),
+                     time = c(replicate(length(ter$id), c(0, sort(runif(n_i - 1, 1, tmax))))))
+  X <- model.matrix(~ 1 + splines::ns(time, knots = kn, Boundary.knots = Bkn), 
+                    data = long)
+  Z <- model.matrix(~ 1 + splines::ns(time, knots = kn, Boundary.knots = Bkn), 
+                    data = long)
+  eta_y <- as.vector(X %*% betas + rowSums(Z * b[long$id, ]))
+  long$y <- rnorm(length(eta_y), eta_y, sigma_y)
+  long_cens <- long$time <= rep(ter$time, times = rle(long$id)$lengths) 
+  long <- long[long_cens, , drop = FALSE] # drop censored encounters
+  remove(kn, Bkn, X, betas, Z, b, eta_y, sigma_y, n_i, tmax, long_cens, scale)
+  ##############################################################################
+  # return
+  list(long = long, ter = ter, rec = rec)
+}
+set.seed(2022); fake_data <- gen_data()
+term_data <- fake_data$ter # terminal event data
+recu_data <- fake_data$rec # recurrent events data
+lme_data <- fake_data$long # longitudial marker data
+################################################################################
+cox_data <- rc_setup(rc_data = recu_data, trm_data = term_data,
+                     rc_idVar = "id", rc_statusVar = "status",
+                     rc_startVar = "tstart", rc_stopVar = "tstop",
+                     trm_idVar = "id", trm_statusVar = "status",
+                     trm_stopVar = "time",
+                     nameStrata = "strata", nameStatus = "status")
+levels(cox_data$strata) <- c("Rec", "Ter")
+################################################################################
+library(JMbayes2)
+long_fit <- lme(y ~ time, lme_data, ~ time | id)
+ter_fit  <- coxph(Surv(tstart, tstop, status) ~ group:strata(strata), cox_data)
+jm_fit   <- jm(ter_fit, long_fit, "time", functional_forms = ~ value(y):strata,
+               recurrent = "gap")
+``` 
+
+## Recurrent Events
+
+<br>
+
+<br>
+
+<pre>
+<code>
+library(<mark class="c4">JMbayes2</mark>)<br>
+long_fit  <- lme(y ~ time, long, ~ time | id)<br>
+surv_fit  <- coxph(Surv(tstart, tstop, status) ~ sex<mark class="hc2">:strata(process)</mark>, surv)<br>
+jm_fit    <- jm(surv_fit, long_fit, 'time',
+
+                functional_forms = ~ value(y)<mark class="hc2">:process</mark>,
+                
+                <mark class="hc3">recurrent = 'gap'</mark>)<br>
+</code>
+</pre>
+ 
+## Recurrent Events 
+ 
+```{r recurrent5, echo = FALSE, eval = FALSE}
+
+summary(jm_fit)
+
+```
+
+<pre>
+<code>
+summary(jm_fit)<br>
+</code>
+</pre>
+
+<article>
+<pre>
+ ## 
+ ## Call:
+ ## jm(Surv_object = ter_fit, Mixed_objects = long_fit, time_var = "time", 
+ ##     recurrent = "gap", functional_forms = ~value(y):strata)
+ ## 
+ ## Data Descriptives:
+ ## Number of Groups: 500        Number of events: 2250 (81.6%)
+ ## Number of Observations:
+ ##   y: 3075
+ ## 
+ ##                  DIC     WAIC      LPML
+ ## marginal    13501.29 13337.81 -7021.504
+ ## conditional 14644.81 14287.74 -7842.206
+ ## 
+ ## Random-effects covariance matrix:
+ ##                      
+ ##        StdDev   Corr 
+ ## (Intr) 0.6737 (Intr) 
+ ## time   0.4474 -0.0461
+ <mark class="c3">## 
+ ## Frailty standard deviation:
+ ##                 Mean   2.5%  97.5%
+ ## sigma_frailty 0.6107 0.5249 0.7006</mark>
+ ## 
+ ## Survival Outcome:
+ ##                           Mean  StDev   2.5%  97.5%     P   Rhat
+ ## group:strata(strata)Rec 0.5354 0.1194 0.2977 0.7661 0e+00 1.0077
+ ## group:strata(strata)Ter 0.4452 0.1193 0.2120 0.7023 2e-04 1.0127
+ <mark class="c2">## value(y):strataRec      0.4821 0.0309 0.4281 0.5467 0e+00 1.5571
+ ## value(y):strataTer      0.4031 0.0454 0.3265 0.4964 0e+00 1.4754
+ ## frailty                 0.6524 0.1249 0.4164 0.9093 0e+00 1.0072</mark>
+ ## 
+ ## Longitudinal Outcome: y (family = gaussian, link = identity)
+ ##               Mean  StDev   2.5%  97.5% P   Rhat
+ ## (Intercept) 6.9147 0.1160 6.6809 7.1357 0 1.0008
+ ## time        0.2867 0.0619 0.1685 0.4110 0 1.0006
+ ## sigma       0.7154 0.0123 0.6923 0.7411 0 1.0002
+ <mark class="c1">## 
+ ## MCMC summary:
+ ## chains: 3 
+ ## iterations per chain: 3500 
+ ## burn-in per chain: 500 
+ ## thinning: 1 
+ ## time: 3.5 min</mark>
+</pre>
+</article>
+
+<br>
+
+<table style="margin-right: 60px" align="center">
+  <tr>
+    <td>&nbsp;<img src="Figures/icons-link.png" width="65px"/></td>
+    <td>&nbsp;<font size=4 color="#515151"><a href="https://drizopoulos.github.io/JMbayes2/articles/Recurring_Events.html"><b>Recurrent Events</a></b> vignette.</font></td>
+</table>
+
+<br>
+
+
+## Dynamic Predictions
+
+```{r dp1, cache = TRUE, echo = FALSE}
+
+library('JMbayes2')
+long_fit  <- lme(log(serBilir) ~ ns(year, 2) * sex, pbc2, ~ ns(year, 2) | id)
+long_fit2 <- mixed_model(ascites ~ year * sex, ~ year | id, pbc2, binomial())
+pbc2.id$event <- as.numeric(pbc2.id$status != 'alive')
+ter_fit   <- coxph(Surv(years, status2) ~ sex, pbc2.id)
+jm_fit2   <- jm(ter_fit, list(long_fit, long_fit2), 'year')
+################################################################################
+id <- 93
+t0 <- 2
+new_data <- pbc2[pbc2$id %in% id, ]
+new_data <- new_data[new_data$year < t0, ]
+new_data$status2 <- 0
+new_data$years <- t0
+new_data$year <- round(new_data$year, 2)
+rownames(new_data) <- NULL
+################################################################################
+pred_long <- predict(jm_fit2, new_data, process = 'longitudinal',
+                     times = seq(t0, 12, length.out = 200), return_newdata = TRUE)
+pred_ter <- predict(jm_fit2, new_data, process = 'event',
+                    times = seq(t0, 12, length.out = 200), return_newdata = TRUE)
+
+```
+
+```{r dp2, fig.align = "center", cache = TRUE, fig.width = 9, fig.height = 3.6, dependson = c("dp1")}
+
+col1 <- "#F05863"
+col2 <- "#D36EAB"
+id <- 93
+t0v <- 2:8
+t0v <- ceiling(pbc2$year[pbc2$id %in% id])
+t0v <- t0v[t0v >= 2 & t0v < 8]
+library('JMbayes2')
+t0 <- t0v[1]
+# new data
+new_data <- pbc2[pbc2$id %in% id, ]
+new_data <- new_data[new_data$year < t0, ]
+new_data$status2 <- 0
+new_data$years <- t0
+new_data$year <- round(new_data$year, 2)
+rownames(new_data) <- NULL
+# prediction
+pred_long <- predict(jm_fit2, new_data, process = 'longitudinal',
+                     times = seq(t0, 12, length.out = 200), return_newdata = TRUE)
+# plot
+par(mar = c(0, 0, 0, 0), oma = c(2.5, 2.75, 0.25, 2.75))
+## left
+par(fig = c(0, 0.5, 0, 1))
+ylim <- c(0, 9)
+xlim <- c(0, 12)
+plot(NA, ylab = "", xlab = "", ylim = ylim, xlim = xlim, xaxt = "n", yaxt = "n")
+mtext(expression(paste(eta[1[i]], "(t)")), 2, las = 1, line = 1)
+axis(2, las = 1, at = seq(0, 9, 3))
+axis(1, col.axis = NA,  at = seq(0, 12, 4))
+### before t0
+x <- c(pred_long$newdata$year, pred_long$newdata2$year[1], 
+       pred_long$newdata2$year[1], rev(pred_long$newdata$year))
+y <- c(pred_long$newdata$low_serBilir, pred_long$newdata2$low_serBilir[1], 
+       pred_long$newdata2$upp_serBilir[1], rev(pred_long$newdata$upp_serBilir))
+polygon(x, y, col = col_f(col1, 80), border = NA)
+points(pred_long$newdata$year, log(pred_long$newdata$serBilir), col = col1, pch = 19)
+lines(c(pred_long$newdata$year, pred_long$newdata2$year[1]), 
+      c(pred_long$newdata$pred_serBilir, pred_long$newdata2$pred_serBilir[1]), 
+      col = col_f(col1, 40), lwd = 3)
+### after t0
+x <- c(pred_long$newdata2$year, rev(pred_long$newdata2$year))
+y <- c(pred_long$newdata2$low_serBilir, rev(pred_long$newdata2$upp_serBilir))
+polygon(x, y, col = col_f(col1, 50), border = NA)
+lines(pred_long$newdata2$year, pred_long$newdata2$pred_serBilir, col = col1, lwd = 3)
+abline(v = t0, col = 1, lwd = 0.25)
+## right
+par(fig = c(0.5, 1, 0, 1), new = TRUE)
+ylim <- c(0, 1)
+xlim <- c(0, 12)
+plot(NA, ylab = "", xlab = "", ylim = ylim, xlim = xlim, xaxt = "n", yaxt = "n")
+mtext(expression(paste(eta[2[i]], "(t)")), 4, las = 1, line = 1)
+mtext("t", 1, line = 1.5)
+axis(4, las = 1, at = seq(0, 1, length.out = 4), labels = round(seq(0, 1, length.out = 4), 1))
+axis(1, at = seq(0, 12, 4))
+### before t0
+x <- c(pred_long$newdata$year, pred_long$newdata2$year[1], 
+       pred_long$newdata2$year[1], rev(pred_long$newdata$year))
+y <- c(pred_long$newdata$low_ascites, pred_long$newdata2$low_ascites[1], 
+       pred_long$newdata2$upp_ascites[1], rev(pred_long$newdata$upp_ascites))
+polygon(x, y, col = col_f(col2, 80), border = NA)
+points(pred_long$newdata$year, pred_long$newdata$ascites != "No", col = col2, pch = 19)
+lines(c(pred_long$newdata$year, pred_long$newdata2$year[1]), 
+      c(pred_long$newdata$pred_ascites, pred_long$newdata2$pred_ascites[1]), 
+      col = col_f(col2, 40), lwd = 3)
+### after t0
+x <- c(pred_long$newdata2$year, rev(pred_long$newdata2$year))
+y <- c(pred_long$newdata2$low_ascites, rev(pred_long$newdata2$upp_ascites))
+polygon(x, y, col = col_f(col2, 50), border = NA)
+lines(pred_long$newdata2$year, pred_long$newdata2$pred_ascites, col = col2, lwd = 3)
+abline(v = t0, col = 1, lwd = 0.25)
+
+```
+
+<pre>
+<code>
+pred_long <- predict(jm_fit, new_data, process = 'longitudinal',
+
+                     times = seq(tstart, 12))<br>
+</pre>
+</code>
+
+## Dynamic Predictions
+
+```{r dp3, fig.align = "center", cache = TRUE, fig.width = 9, fig.height = 3.6, dependson = c("dp1"), animation.hook = "gifski", interval = 1}
+
+col1 <- "#F05863"
+col2 <- "#D36EAB"
+id <- 93
+t0v <- 2:8
+t0v <- ceiling(pbc2$year[pbc2$id %in% id])
+t0v <- t0v[t0v >= 2 & t0v < 8]
+library('JMbayes2')
+for(t0 in t0v) {
+  # new data
+  new_data <- pbc2[pbc2$id %in% id, ]
+  new_data <- new_data[new_data$year < t0, ]
+  new_data$status2 <- 0
+  new_data$years <- t0
+  new_data$year <- round(new_data$year, 2)
+  rownames(new_data) <- NULL
+  # prediction
+  pred_long <- predict(jm_fit2, new_data, process = 'longitudinal',
+                       times = seq(t0, 12, length.out = 200), return_newdata = TRUE)
+  # plot
+  par(mar = c(0, 0, 0, 0), oma = c(2.5, 2.75, 0.25, 2.75))
+  ## left
+  par(fig = c(0, 0.5, 0, 1))
+  ylim <- c(0, 9)
+  xlim <- c(0, 12)
+  plot(NA, ylab = "", xlab = "", ylim = ylim, xlim = xlim, xaxt = "n", yaxt = "n")
+  mtext(expression(paste(eta[1[i]], "(t)")), 2, las = 1, line = 1)
+  axis(2, las = 1, at = seq(0, 9, 3))
+  axis(1, col.axis = NA,  at = seq(0, 12, 4))
+  ### before t0
+  x <- c(pred_long$newdata$year, pred_long$newdata2$year[1], 
+         pred_long$newdata2$year[1], rev(pred_long$newdata$year))
+  y <- c(pred_long$newdata$low_serBilir, pred_long$newdata2$low_serBilir[1], 
+         pred_long$newdata2$upp_serBilir[1], rev(pred_long$newdata$upp_serBilir))
+  polygon(x, y, col = col_f(col1, 80), border = NA)
+  points(pred_long$newdata$year, log(pred_long$newdata$serBilir), col = col1, pch = 19)
+  lines(c(pred_long$newdata$year, pred_long$newdata2$year[1]), 
+        c(pred_long$newdata$pred_serBilir, pred_long$newdata2$pred_serBilir[1]), 
+        col = col_f(col1, 40), lwd = 3)
+  ### after t0
+  x <- c(pred_long$newdata2$year, rev(pred_long$newdata2$year))
+  y <- c(pred_long$newdata2$low_serBilir, rev(pred_long$newdata2$upp_serBilir))
+  polygon(x, y, col = col_f(col1, 50), border = NA)
+  lines(pred_long$newdata2$year, pred_long$newdata2$pred_serBilir, col = col1, lwd = 3)
+  abline(v = t0, col = 1, lwd = 0.25)
+  ## right
+  par(fig = c(0.5, 1, 0, 1), new = TRUE)
+  ylim <- c(0, 1)
+  xlim <- c(0, 12)
+  plot(NA, ylab = "", xlab = "", ylim = ylim, xlim = xlim, xaxt = "n", yaxt = "n")
+  mtext(expression(paste(eta[2[i]], "(t)")), 4, las = 1, line = 1)
+  mtext("t", 1, line = 1.5)
+  axis(4, las = 1, at = seq(0, 1, length.out = 4), labels = round(seq(0, 1, length.out = 4), 1))
+  axis(1, at = seq(0, 12, 4))
+  ### before t0
+  x <- c(pred_long$newdata$year, pred_long$newdata2$year[1], 
+         pred_long$newdata2$year[1], rev(pred_long$newdata$year))
+  y <- c(pred_long$newdata$low_ascites, pred_long$newdata2$low_ascites[1], 
+         pred_long$newdata2$upp_ascites[1], rev(pred_long$newdata$upp_ascites))
+  polygon(x, y, col = col_f(col2, 80), border = NA)
+  points(pred_long$newdata$year, pred_long$newdata$ascites != "No", col = col2, pch = 19)
+  lines(c(pred_long$newdata$year, pred_long$newdata2$year[1]), 
+        c(pred_long$newdata$pred_ascites, pred_long$newdata2$pred_ascites[1]), 
+        col = col_f(col2, 40), lwd = 3)
+  ### after t0
+  x <- c(pred_long$newdata2$year, rev(pred_long$newdata2$year))
+  y <- c(pred_long$newdata2$low_ascites, rev(pred_long$newdata2$upp_ascites))
+  polygon(x, y, col = col_f(col2, 50), border = NA)
+  lines(pred_long$newdata2$year, pred_long$newdata2$pred_ascites, col = col2, lwd = 3)
+  abline(v = t0,, col = 1, lwd = 0.25)
+}
+  
+
+```
+
+<pre>
+<code>
+pred_long <- predict(jm_fit, new_data, process = 'longitudinal',
+
+                     times = seq(tstart, 12))<br>
+</pre>
+</code>
+
+## Dynamic Predictions
+
+```{r dp4, fig.align = "center", cache = TRUE, fig.width = 9, fig.height = 3.6, dependson = c("dp1")}
+
+t0 <- 2
+
+col1 <- "#F05863"
+col2 <- "#D36EAB"
+col3 <- "#F58420"
+# plot
+par(mar = c(0, 0, 0, 0), oma = c(2.5, 2.75, 0.25, 2.75))
+## top left
+par(fig = c(0, 1, 0.5, 1))
+plot(NA, xlim = c(0, 12), ylim = c(-0.45, 9.45), xaxt = "n", yaxt = "n", xlab = "", ylab = "")
+mtext(expression(paste(eta[1[i]], "(t)")), 2, las = 1, line = 1)
+axis(2, las = 1, at = seq(0, 9, 3), cex.axis = 0.85)
+x <- c(pred_long$newdata$year, pred_long$newdata2$year[1], 
+       pred_long$newdata2$year[1], rev(pred_long$newdata$year))
+y <- c(pred_long$newdata$low_serBilir, pred_long$newdata2$low_serBilir[1],
+       pred_long$newdata2$upp_serBilir[1], rev(pred_long$newdata$upp_serBilir))  
+polygon(x, y, col = col_f(col1, 50), border = NA)
+points(pred_long$newdata$year, log(pred_long$newdata$serBilir), col = col1, pch = 19)
+lines(c(pred_long$newdata$year, pred_long$newdata2$year[1]), 
+      c(pred_long$newdata$pred_serBilir, pred_long$newdata2$pred_serBilir[1]), 
+      col = col1, lwd = 3)
+## bottom left
+par(fig = c(0, 1, 0, 0.5), new = TRUE)
+plot(NA, xlim = c(0, 12), ylim = c(-0.05, 1.05), xaxt = "n", yaxt = "n")
+axis(2, las = 1, at = seq(0, 1, length.out = 4), labels = round(seq(0, 1, length.out = 4), 1), cex.axis = 0.85)
+mtext(expression(paste(eta[2[i]], "(t)")), 2, las = 1, line = 1)
+x <- c(pred_long$newdata$year, pred_long$newdata2$year[1], 
+       pred_long$newdata2$year[1], rev(pred_long$newdata$year))
+y <- c(pred_long$newdata$low_ascites, pred_long$newdata2$low_ascites[1], 
+       pred_long$newdata2$upp_ascites[1], rev(pred_long$newdata$upp_ascites))  
+polygon(x, y, col = col_f(col2, 50), border = NA)
+points(pred_long$newdata$year, pred_long$newdata$ascites != "No", col = col2, pch = 19)
+lines(c(pred_long$newdata$year, pred_long$newdata2$year[1]), 
+      c(pred_long$newdata$pred_ascites, pred_long$newdata2$pred_ascites[1]), 
+      col = col2, lwd = 3)
+## right
+par(fig = c(0, 1, 0, 1), new = TRUE)
+plot(NA, xlim = c(0, 12), ylim = c(0, 1), yaxt = "n", xaxt = "n")
+axis(1, at = seq(0, 12, 4))
+mtext("t", 1, line = 1.5)
+axis(4, las = 1, at = seq(0, 1, length.out = 4), labels = round(seq(0, 1, length.out = 4), 1))
+mtext("S(t)", 4, las = 1, line = 1)
+par_usr <- par("usr")
+rect(xleft = t0, ybottom = par_usr[3], xright = par_usr[2], ytop = par_usr[4],
+     col = "white")
+  x <- c(pred_ter$year, rev(pred_ter$year))
+y <- c(1 - pred_ter$low_CIF, rev(1 - pred_ter$upp_CIF))
+polygon(x, y, col = col_f(col3, 50), border = NA)
+lines(pred_ter$year, 1 - pred_ter$pred_CIF, col = col3, lwd = 3)
+abline(v = t0)
+
+
+```
+
+<pre>
+<code>
+pred_ter <- predict(jm_fit, new_data, process = 'event',
+
+                    times = seq(tstart, 12))<br>
+</pre>
+</code>
+
+## Dynamic Predictions
+
+```{r dp5, fig.align = "center", cache = TRUE, fig.width = 9, fig.height = 3.6, dependson = c("dp1"), animation.hook = "gifski", interval = 1}
+
+col1 <- "#F05863"
+col2 <- "#D36EAB"
+col3 <- "#F58420"
+id <- 93
+t0v <- 2:8
+t0v <- ceiling(pbc2$year[pbc2$id %in% id])
+t0v <- t0v[t0v >= 2 & t0v < 8]
+library('JMbayes2')
+for(t0 in t0v) {
+  # new data
+  new_data <- pbc2[pbc2$id %in% id, ]
+  new_data <- new_data[new_data$year < t0, ]
+  new_data$status2 <- 0
+  new_data$years <- t0
+  new_data$year <- round(new_data$year, 2)
+  rownames(new_data) <- NULL
+  # prediction
+  pred_long <- predict(jm_fit2, new_data, process = 'longitudinal',
+                       times = seq(t0, 12, length.out = 200), return_newdata = TRUE)
+  pred_ter <- predict(jm_fit2, new_data, process = 'event',
+                      times = seq(t0, 12, length.out = 200), return_newdata = TRUE)
+  # plot
+  par(mar = c(0, 0, 0, 0), oma = c(2.5, 2.75, 0.25, 2.75))
+  ## top left
+  par(fig = c(0, 1, 0.5, 1))
+  plot(NA, xlim = c(0, 12), ylim = c(-0.45, 9.45), xaxt = "n", yaxt = "n", xlab = "", ylab = "")
+  mtext(expression(paste(eta[1[i]], "(t)")), 2, las = 1, line = 1)
+  axis(2, las = 1, at = seq(0, 9, 3), cex.axis = 0.85)
+  x <- c(pred_long$newdata$year, pred_long$newdata2$year[1], 
+         pred_long$newdata2$year[1], rev(pred_long$newdata$year))
+  y <- c(pred_long$newdata$low_serBilir, pred_long$newdata2$low_serBilir[1],
+         pred_long$newdata2$upp_serBilir[1], rev(pred_long$newdata$upp_serBilir))  
+  polygon(x, y, col = col_f(col1, 50), border = NA)
+  points(pred_long$newdata$year, log(pred_long$newdata$serBilir), col = col1, pch = 19)
+  lines(c(pred_long$newdata$year, pred_long$newdata2$year[1]), 
+        c(pred_long$newdata$pred_serBilir, pred_long$newdata2$pred_serBilir[1]), 
+        col = col1, lwd = 3)
+  ## bottom left
+  par(fig = c(0, 1, 0, 0.5), new = TRUE)
+  plot(NA, xlim = c(0, 12), ylim = c(-0.05, 1.05), xaxt = "n", yaxt = "n")
+  axis(2, las = 1, at = seq(0, 1, length.out = 4), labels = round(seq(0, 1, length.out = 4), 1), cex.axis = 0.85)
+  mtext(expression(paste(eta[2[i]], "(t)")), 2, las = 1, line = 1)
+  x <- c(pred_long$newdata$year, pred_long$newdata2$year[1], 
+         pred_long$newdata2$year[1], rev(pred_long$newdata$year))
+  y <- c(pred_long$newdata$low_ascites, pred_long$newdata2$low_ascites[1], 
+         pred_long$newdata2$upp_ascites[1], rev(pred_long$newdata$upp_ascites))  
+  polygon(x, y, col = col_f(col2, 50), border = NA)
+  points(pred_long$newdata$year, pred_long$newdata$ascites != "No", col = col2, pch = 19)
+  lines(c(pred_long$newdata$year, pred_long$newdata2$year[1]), 
+        c(pred_long$newdata$pred_ascites, pred_long$newdata2$pred_ascites[1]), 
+        col = col2, lwd = 3)
+  ## right
+  par(fig = c(0, 1, 0, 1), new = TRUE)
+  plot(NA, xlim = c(0, 12), ylim = c(0, 1), yaxt = "n", xaxt = "n")
+  axis(1, at = seq(0, 12, 4))
+  mtext("t", 1, line = 1.5)
+  axis(4, las = 1, at = seq(0, 1, length.out = 4), labels = round(seq(0, 1, length.out = 4), 1))
+  mtext("S(t)", 4, las = 1, line = 1)
+  par_usr <- par("usr")
+  rect(xleft = t0, ybottom = par_usr[3], xright = par_usr[2], ytop = par_usr[4],
+       col = "white")
+    x <- c(pred_ter$year, rev(pred_ter$year))
+  y <- c(1 - pred_ter$low_CIF, rev(1 - pred_ter$upp_CIF))
+  polygon(x, y, col = col_f(col3, 50), border = NA)
+  lines(pred_ter$year, 1 - pred_ter$pred_CIF, col = col3, lwd = 3)
+  abline(v = t0)
+}
+  
+```
+
+<pre>
+<code>
+pred_ter <- predict(jm_fit, new_data, process = 'event',
+
+                    times = seq(tstart, 12))<br>
+</pre>
+</code>
+
+- Predictive Accuracy
+
+<center>
+<table class="tab">
+  <tr>
+    <th class = "w3">
+    <mark>tvROC()</mark>
+    </th>
+    <th class = "w3">
+    <mark>calibration_metrics()</mark>
+    </th>
+    <th class = "w3">
+    <mark>tvBrier()</mark>
+    </th>
+  </tr>
+  <tr>
+    <th class = "w3">
+    &nbsp;
+    </th>
+    <th class = "w3">
+    &nbsp;
+    </th>
+    <th class = "w3">
+    &nbsp;
+    </th>
+  </tr>
+  <tr>
+    <th class = "w3">
+    <mark>tvAUC()</mark>
+    </th>
+    <th class = "w3">
+    <mark>calibration_plot()</mark>&nbsp;&nbsp;&nbsp;
+    </th>
+    <th class = "w3">
+    </th>
+  </tr>
+</table>
+</center>
+
+<br>
+
+<table style="margin-right: 60px" align="center">
+  <tr>
+    <td>&nbsp;<img src="Figures/icons-link.png" width="65px"/></td>
+    <td>&nbsp;<font size=4 color="#515151"><a href="https://drizopoulos.github.io/JMbayes2/articles/Dynamic_Predictions.html"><b><u>Dynamic Predictions</u></a></b> vignette.</font></td>
+</table>
+
+<br>
+
+## More in JMbayes2
+
+- Shrinkage priors.
+
+- Combine competing risks and recurrent events.
+
+- Dynamic predicitons:
+
+  - Joint models with recurrent events;
+
+  - Multistate joint models.
+
+<br>
+
+<br>
+
+<center>
+<div style="width: 100%; background: #D3D3D350;">
+<br>
+<font size=5.5>Further help in: 
+
+https://drizopoulos.github.io/JMbayes2/</font>
+
+<br>
+</div>
+</center>
+
+## Team
+
+<script src="https://scripts.sirv.com/sirvjs/v3/sirv.js"></script>
+<center>
+<table>
+  <tr>
+    <td>
+      <div class="figure"><a href="https://www.drizopoulos.com/">
+      <img class="Sirv image-main" src="efefef" data-src="figures/face_dimitris1.jpg" width = "120px">
+      <img class="Sirv image-hover" data-src="figures/face_dimitris2.jpg" width = "120px">
+      </a></div>
+    </td>
+    <td>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+    <td>
+      <div class="figure"><a href="https://www.gregpapageorgiou.com/">
+      <img class="Sirv image-main" src="efefef" data-src="figures/face_greg1.jpg" width = "120px">
+      <img class="Sirv image-hover" data-src="figures/face_greg2.jpg" width = "120px">
+      </a></div>
+    </td>
+    <td>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+    <td>
+      <div class="figure"><a href="https://www.pafonso.com/">
+      <img class="Sirv image-main" src="efefef" data-src="figures/face_pedro1.jpg" width = "120px">
+      <img class="Sirv image-hover" data-src="figures/face_pedro2.jpg" width = "120px">
+      </a></div>
+    </td>
+  </tr>
+</table>
+</center>
+
+
+## {data-background="figures/slide_thanks.jpg" data-background-size=cover}
+
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<font size=8 color=#ffffff style="margin-left: 60px"><b>Thanks for your attention.</b></font>
+
+<table style="margin-left: 60px" align="left">
+  <tr>
+    <td><font size=5 color="#ffffff"> p&hairsp;afonso.com&thinsp;/&thinsp;ibc22 </font></th>
+  </tr>
+</table>

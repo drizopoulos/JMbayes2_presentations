@@ -1,0 +1,273 @@
+/* Cover */
+
+slides>slide.title-slide { /* Background image */
+  background-image: url(Figures/cover.jpg);
+  background-size: cover;
+}
+
+aside.gdbar { /* Cover logo location */
+ background: transparent;
+ top: 10px;
+ left: initial;
+ right: 50px;
+}
+
+.gdbar img { /* Cover logo dimension */
+  width: 160px !important;
+  height: 160px !important;
+  margin: 0px !important;
+}
+
+slides>slide.title-slide hgroup h1 { /* Title */
+  font-size: 50px;
+  color: #ffffff;
+}
+
+slides>slide.title-slide p { /* Authors and date */
+    color: #ffffff;
+    font-size: 23px;
+}
+
+/* Slide */
+
+slides > slide.img {
+  margin-bottom: 0px;
+}
+
+
+slides > slide {
+  overflow-y: scroll;
+  padding-bottom: 0px;
+  background: #ffffff;
+}
+
+slides>slide hgroup h2 { /* Slide title */
+    color: #203567;
+}
+
+slides > slide:not(.nobackground):after { /*slide number on top*/
+    top: 50px;
+}
+
+slides > slide:not(.nobackground):before { /* to remove logo from slide*/
+    height: 0px;
+}
+
+a { /* unvisited link */
+  border-bottom: none;
+  color: #203567;
+}
+
+/* mouse over link */
+a:hover {
+  color: #F05863 !important;
+}
+
+pre {
+  margin: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+pre.b {
+  font-size: 30px;
+}
+
+pre code {
+  background-color: #eee;
+  display: block;
+  padding-left: 20px;
+  margin: 0px;
+  color: #515151;
+  font-size: 20px;
+  line-height: 100%;
+}
+
+/*Hilight Code chunk*/
+
+mark.hc1 { /* hilight */
+  background-color: #F0586380;
+  color: #515151;
+}
+
+mark.hc2 { /* hilight */
+  background-color: #D36EAB80;
+  color: #515151;
+}
+
+mark.hc3 { /* hilight */
+  background-color: #F5842080;
+  color: #515151;
+}
+
+/*Hilight Print chunk*/
+
+mark.c1 { /* font color */
+  color: #F05863;
+  background-color: transparent;
+  font-weight: bold;
+}
+
+mark.c2 { /* font color */
+  color: #D36EAB;
+  background-color: transparent;
+  font-weight: bold;
+}
+
+mark.c3 { /* font color */
+  color: #F58420;
+  background-color: transparent;
+  font-weight: bold;
+}
+
+mark.c4 { /* font color */
+  color: #203567;
+  background-color: transparent;
+  font-weight: bold;
+}
+
+/* figure that changes with hover */
+
+.figure {
+    position: relative;
+    width: 120px; /* can be omitted for a regular non-lazy image */
+    max-width: 100%;
+}
+.figure img.image-hover {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity .2s;
+}
+.figure:hover img.image-hover {
+  opacity: 1;
+}
+
+
+/* table */
+
+table.tab th.g1 { 
+  font-size: 18px !important;
+  color: #797979 !important;
+  background-color: #F7F7F6;
+  font-weight: normal !important;
+  padding-top: 10px; 
+  padding-bottom: 5px;
+  padding-left: 10px; 
+  padding-right: 10px;
+}
+
+table.tab th.w1 { 
+  font-size: 18px !important;
+  color: #797979 !important;
+  background-color: #FFFFFF;
+  font-weight: normal !important;
+  padding-top: 10px; 
+  padding-bottom: 5px;
+  padding-left: 10px; 
+  padding-right: 10px;
+}
+
+table.tab th.g2 { 
+  font-size: 22px !important;
+  color: #474747 !important;
+  background-color: #F7F7F6;
+  font-family: "Lucida Console", "Courier New", monospace;
+  font-weight: bold !important;
+  padding-top: 0px; 
+  padding-bottom: 0px;
+  padding-left: 10px; 
+  padding-right: 10px;
+}
+
+table.tab th.w2 { 
+  font-size: 22px !important;
+  color: #474747 !important;
+  background-color: #FFFFFF;
+  font-family: "Lucida Console", "Courier New", monospace;
+  font-weight: bold !important;
+  padding-top: 0px; 
+  padding-bottom: 0px;
+  padding-left: 10px; 
+  padding-right: 10px;
+}
+
+table.tab td.gg { 
+  font-size: 30px !important;
+  color: green !important;
+  background-color: #F7F7F6;
+  padding-top: 20px; 
+  padding-bottom: 20px;
+  padding-left: 0px; 
+  padding-right: 10px;
+  border-bottom: 1px solid #EAE9E8;
+}
+
+table.tab td.wg { 
+  font-size: 30px !important;
+  color: green !important;
+  background-color: #FFFFFF;
+  padding-top: 20px; 
+  padding-bottom: 20px;
+  padding-left: 0px; 
+  padding-right: 10px;
+  border-bottom: 1px solid #EAE9E8;
+}
+
+table.tab td.go { 
+  font-size: 30px !important;
+  color: orange !important;
+  background-color: #F7F7F6;
+  padding-top: 20px; 
+  padding-bottom: 20px;
+  padding-left: 0px; 
+  padding-right: 10px;
+  border-bottom: 1px solid #EAE9E8;
+}
+
+table.tab td.wo { 
+  font-size: 30px !important;
+  color: orange !important;
+  background-color: #FFFFFF;
+  padding-top: 20px; 
+  padding-bottom: 20px;
+  padding-left: 0px; 
+  padding-right: 10px;
+  border-bottom: 1px solid #EAE9E8;
+}
+
+table.tab td.wg2 { 
+  font-size: 20px !important;
+  background-color: #FFFFFF;
+  padding-top: 20px; 
+  padding-bottom: 20px;
+  padding-left: 0px; 
+  padding-right: 10px;
+  border-bottom: 1px solid #EAE9E8;
+}
+
+table.tab th.w3 { 
+  font-size: 20px !important;
+  color: #515151 !important;
+  background-color: #FFFFFF;
+  font-family: 'Source Code Pro', 'Courier New', monospace;
+  font-weight: normal !important;
+  padding-top: 0px; 
+  padding-bottom: 0px;
+  padding-left: 0px; 
+  padding-right: 90px;
+}
+
+mark {
+  background-color: #EEEEEE;
+  color: #515151;
+}
+
+/* mouse selection */
+::selection {
+  background: #203567;
+}

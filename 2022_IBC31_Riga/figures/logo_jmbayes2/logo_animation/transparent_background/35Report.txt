@@ -1,0 +1,41 @@
+Report created: 
+	7/8/2022	7:28:24 PM
+
+Project name: 35.aep
+
+Source files collected to: 
+	W:\jmbayes2\Edit\SourceFiles
+
+Source files collected: All
+
+Collected comps:  
+	Main
+	Text
+	BG
+	Lines
+	Yellow
+	Purple
+	Pink
+	JM
+	2
+	01
+	02
+	03
+	
+Number of collected files:  1
+
+Size of collected files:  176 KB
+
+Collected source files: 
+	W:\jmbayes2\Layaring.ai
+	
+Rendering plug-ins:
+	Classic 3D
+	
+Effects used:  2
+
+Effect:  Fill
+	
+Effect:  Sharpen
+	
+
