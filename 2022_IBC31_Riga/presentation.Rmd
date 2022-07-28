@@ -8,7 +8,7 @@ output:
     smaller: yes
     transition: 0
     widescreen: yes
-    logo: Figures/logo_emc.png
+    logo: figures/logo_emc.png
 ---
 
 ```{r setup, include = FALSE}
@@ -161,7 +161,7 @@ $$
 </div>
 
 <div style="float: right; width: 50%;">
-<center><a href="https://drizopoulos.github.io/JMbayes2/"><img src="Figures/logo_jmbayes2.gif" width="400px"/></a></center>
+<center><a href="https://drizopoulos.github.io/JMbayes2/"><img src="figures/logo_jmbayes2.gif" width="400px"/></a></center>
 </div>
 
 
@@ -663,7 +663,7 @@ for(i in seq_along(t)) {
 
 <table style="margin-right: 60px" align="center">
   <tr>
-    <td>&nbsp;<img src="Figures/icons_link.png" width="65px"/></td>
+    <td>&nbsp;<img src="figures/icons_link.png" width="65px"/></td>
     <td>&nbsp;<font size=4 color="#515151"><a href="https://drizopoulos.github.io/JMbayes2/articles/Transformation_Functions.html"><b><u>Transformation Functions</a></u></b>  vignette.</font></td>
   </tr>
 </table>
@@ -782,7 +782,7 @@ for(i in seq_along(t)) {
 
 <table style="margin-right: 60px" align="center">
   <tr>
-    <td>&nbsp;<img src="Figures/icons-link.png" width="65px"/></td>
+    <td>&nbsp;<img src="figures/icons_link.png" width="65px"/></td>
     <td>&nbsp;<font size=4 color="#515151"><a href="https://drizopoulos.github.io/JMbayes2/articles/Transformation_Functions.html"><b><u>Transformation Functions</a></u></b>  vignette.</font></td>
   </tr>
 </table>
@@ -900,7 +900,7 @@ for(i in seq_along(t)) {
 
 <table style="margin-right: 60px" align="center">
   <tr>
-    <td>&nbsp;<img src="Figures/icons-link.png" width="65px"/></td>
+    <td>&nbsp;<img src="figures/icons_link.png" width="65px"/></td>
     <td>&nbsp;<font size=4 color="#515151"><a href="https://drizopoulos.github.io/JMbayes2/articles/Transformation_Functions.html"><b>Transformation Functions</a></b>  vignette.</font></td>
   </tr>
 </table>
@@ -1018,7 +1018,7 @@ for(i in seq_along(t)) {
 
 <table style="margin-right: 60px" align="center">
   <tr>
-    <td>&nbsp;<img src="Figures/icons-link.png" width="65px"/></td>
+    <td>&nbsp;<img src="figures/icons_link.png" width="65px"/></td>
     <td>&nbsp;<font size=4 color="#515151"><a href="https://drizopoulos.github.io/JMbayes2/articles/Transformation_Functions.html"><b>Transformation Functions</a></b>  vignette.</font></td>
   </tr>
 </table>
@@ -1138,7 +1138,7 @@ Various distributions:
 <br><br><br><br><br><br><br><br><br><br><br><br><br>
 <table style="margin-right: 60px" align="center">
   <tr>
-    <td>&nbsp;<img src="Figures/icons-link.png" width="65px"/></td>
+    <td>&nbsp;<img src="figures/icons_link.png" width="65px"/></td>
     <td>&nbsp;<font size=4 color="#515151"><a href="https://drizopoulos.github.io/JMbayes2/articles/JMbayes2.html"><b><u>Univariate and Multivariate Joint Models</a></u></b> and <a href="https://drizopoulos.github.io/JMbayes2/articles/Non_Gaussian_Mixed_Models.html"><b><u>Non Gaussian Mixed Models</a></u></b> vignettes.</font></td>
 </table>
 
@@ -1166,7 +1166,7 @@ $$
 
 <table style="margin-right: 60px" align="center">
   <tr>
-    <td>&nbsp;<img src="Figures/icons-link.png" width="65px"/></td>
+    <td>&nbsp;<img src="figures/icons_link.png" width="65px"/></td>
     <td>&nbsp;<font size=4 color="#515151"><a href="https://drizopoulos.github.io/JMbayes2/articles/Competing_Risks.html"><b><u>Competing Risks</a></u></b> and <a href="https://drizopoulos.github.io/JMbayes2/articles/Multi_State_Processes.html"><b><u>Multi-state Processes</a></u></b> vignettes.</font></td>
 </table>
 
@@ -1496,8 +1496,8 @@ text(x = dt$tstop[dt$strata == "ter"], y = 0.5 + rect_hgt, pos = 3,
 <pre><span style="font-size: 20px; line-height: normal;">
  ##   id tstart tstop status strata
   ## 1  1      <mark class="c1">0     2</mark>      1    rec 
- ## 2  1      <mark class="c2">3     4</mark>      1    rec
- ## 3  1      <mark class="c3">5     7</mark>      0    rec
+ ## 2  1      <mark class="c3">3     4</mark>      1    rec
+ ## 3  1      <mark class="c2">5     7</mark>      0    rec
  ## 4  1      0     7      0    ter
 </span></pre>
 </article>
@@ -1785,7 +1785,7 @@ summary(jm_fit)<br>
 
 <table style="margin-right: 60px" align="center">
   <tr>
-    <td>&nbsp;<img src="Figures/icons-link.png" width="65px"/></td>
+    <td>&nbsp;<img src="figures/icons_link.png" width="65px"/></td>
     <td>&nbsp;<font size=4 color="#515151"><a href="https://drizopoulos.github.io/JMbayes2/articles/Recurring_Events.html"><b>Recurrent Events</a></b> vignette.</font></td>
 </table>
 
@@ -2178,7 +2178,7 @@ pred_ter <- predict(jm_fit, new_data, process = 'event',
 
 <table style="margin-right: 60px" align="center">
   <tr>
-    <td>&nbsp;<img src="Figures/icons-link.png" width="65px"/></td>
+    <td>&nbsp;<img src="figures/icons_link.png" width="65px"/></td>
     <td>&nbsp;<font size=4 color="#515151"><a href="https://drizopoulos.github.io/JMbayes2/articles/Dynamic_Predictions.html"><b><u>Dynamic Predictions</u></a></b> vignette.</font></td>
 </table>
 
