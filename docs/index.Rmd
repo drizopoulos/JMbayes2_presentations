@@ -303,6 +303,19 @@ As with many other statistical techniques,<br>
   </div>
 </div>
 
+<button class="modal-button" href="#INLAjoint"><strong>INLAjoint</strong></button>
+<div id="INLAjoint" class="modal">
+  <div class="modal-content">
+  <span class="close">&times;</span>
+  <ul>
+    <li> Multiple longitudinal outcomes of different type</li>
+    <li> competing risks & multi-state models</li>
+    <li> <font color="red">approximate</font></li>
+    <li> <font color="red">limited convergence diagnostics</font></li>
+  </ul>
+  </div>
+</div>
+
 <button class="modal-button" href="#stan_jm"><strong>stan_jm</strong></button>
 <div id="stan_jm" class="modal">
   <div class="modal-content">
@@ -678,7 +691,7 @@ summary(jFit_CR)
   <ul>
     <li>Multiple longitudinal outcomes</li>
     <li>Relative risk model with a frailty term for recurrent events</li>
-    <li>Relative risk model terminating event linked with frailty</li>
+    <li>Relative risk models competing risks terminating events linked with frailty</li>
     <li>Gap time and Calendar time formulations</li>
   </ul>
   
