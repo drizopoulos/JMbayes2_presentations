@@ -71,7 +71,7 @@ Extended Joint Models under the Bayesian Approach
 </div>
 
 <div id = "author">
-<div style = "font-size: 32pt; font-weight: bolder; color: var(--nord4);">Dimitris Rizopoulos</div>
+<div style = "font-size: 30pt; font-weight: bolder; color: var(--nord4);">Dimitris Rizopoulos, P. Afonso, G. Papageorgiou</div>
 <div style = "color: var(--nord9);">Department of Biostatistics</div>
 </div>
 
@@ -310,8 +310,8 @@ As with many other statistical techniques,<br>
   <ul>
     <li> Multiple longitudinal outcomes of different type</li>
     <li> competing risks & multi-state models</li>
-    <li> <font color="red">approximate</font></li>
-    <li> <font color="red">limited convergence diagnostics</font></li>
+    <li> <font color="red">no control approximation error</font></li>
+    <li> <font color="red">limited model assessment diagnostics</font></li>
   </ul>
   </div>
 </div>
@@ -658,7 +658,7 @@ summary(jFit_CR)
       <ul>
         <li>discrimination: <code>tvROC()</code>, <code>tvAUC()</code></li>
         <li>calibration: <code>calibration_plot()</code>, <code>calibration_metrics()</code></li>
-        <li>overall: <code>tvBrier()</code></li>
+        <li>overall: <code>tvBrier()</code>, <code>tvEPCE()</code></li>
       </ul>
   </ul>
   

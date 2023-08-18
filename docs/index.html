@@ -4,7 +4,7 @@
     <title>JMbayes2</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dimitris Rizopoulos" />
-    <meta name="date" content="2023-08-10" />
+    <meta name="date" content="2023-08-18" />
     <script src="libs/header-attrs-2.23/header-attrs.js"></script>
     <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
     <script src="libs/tile-view-0.2.6/tile-view.js"></script>
@@ -30,7 +30,7 @@ Extended Joint Models under the Bayesian Approach
 &lt;/div&gt;
 
 &lt;div id = "author"&gt;
-&lt;div style = "font-size: 32pt; font-weight: bolder; color: var(--nord4);"&gt;Dimitris Rizopoulos&lt;/div&gt;
+&lt;div style = "font-size: 30pt; font-weight: bolder; color: var(--nord4);"&gt;Dimitris Rizopoulos, P. Afonso, G. Papageorgiou&lt;/div&gt;
 &lt;div style = "color: var(--nord9);"&gt;Department of Biostatistics&lt;/div&gt;
 &lt;/div&gt;
 
@@ -256,8 +256,8 @@ As with many other statistical techniques,&lt;br&gt;
   &lt;ul&gt;
     &lt;li&gt; Multiple longitudinal outcomes of different type&lt;/li&gt;
     &lt;li&gt; competing risks &amp; multi-state models&lt;/li&gt;
-    &lt;li&gt; &lt;font color="red"&gt;approximate&lt;/font&gt;&lt;/li&gt;
-    &lt;li&gt; &lt;font color="red"&gt;limited convergence diagnostics&lt;/font&gt;&lt;/li&gt;
+    &lt;li&gt; &lt;font color="red"&gt;no control approximation error&lt;/font&gt;&lt;/li&gt;
+    &lt;li&gt; &lt;font color="red"&gt;limited model assessment diagnostics&lt;/font&gt;&lt;/li&gt;
   &lt;/ul&gt;
   &lt;/div&gt;
 &lt;/div&gt;
@@ -848,7 +848,7 @@ summary(jFit_CR)
       &lt;ul&gt;
         &lt;li&gt;discrimination: &lt;code&gt;tvROC()&lt;/code&gt;, &lt;code&gt;tvAUC()&lt;/code&gt;&lt;/li&gt;
         &lt;li&gt;calibration: &lt;code&gt;calibration_plot()&lt;/code&gt;, &lt;code&gt;calibration_metrics()&lt;/code&gt;&lt;/li&gt;
-        &lt;li&gt;overall: &lt;code&gt;tvBrier()&lt;/code&gt;&lt;/li&gt;
+        &lt;li&gt;overall: &lt;code&gt;tvBrier()&lt;/code&gt;, &lt;code&gt;tvEPCE()&lt;/code&gt;&lt;/li&gt;
       &lt;/ul&gt;
   &lt;/ul&gt;
   
