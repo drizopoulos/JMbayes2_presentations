@@ -91,7 +91,7 @@ layout: true
 <a href="https://twitter.com/drizopoulos"><i class="fab fa-twitter"></i> drizopoulos</a>
 &emsp;&emsp;&emsp;&emsp;
 <a href="https://github.com/drizopoulos"><i class="fab fa-github"></i> drizopoulos</a> &emsp;&emsp;&emsp;&emsp;
-<a href = "http://www.drizopoulos.com/"><i class="fas fa-globe-americas"></i> www.drizopoulos.com</a>
+<a href = "https://www.drizopoulos.com/"><i class="fas fa-globe-americas"></i> www.drizopoulos.com</a>
 </span></div> 
 
 ---
